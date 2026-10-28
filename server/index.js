@@ -13,6 +13,7 @@
  * made fully cheat-proof. This API makes cheating hard: it never trusts timing from the
  * client, signs sessions, bounds the score by what the game can physically spawn in the
  * elapsed server time, enforces 60 s per level, one submission per session, rate limits.
+ * No player names are collected — scores are saved automatically at game over.
  */
 const express = require("express");
 const crypto = require("crypto");
@@ -96,14 +97,6 @@ function verifySig(id, t0, sig) {
   return a.length === b.length && crypto.timingSafeEqual(a, b);
 }
 
-function cleanName(raw) {
-  if (typeof raw !== "string") return null;
-  let s = raw.normalize("NFC").replace(/[\u0000-\u001f\u007f<>&"'`\\{}]/g, "").replace(/[^\p{L}\p{M}\p{N} ._\-]/gu, "").replace(/\s+/g, " ").trim();
-  const chars = Array.from(s);
-  if (chars.length < 1) return null;
-  if (chars.length > 20) s = chars.slice(0, 20).join("").trim();
-  return s || null;
-}
 const int = (v) => (Number.isInteger(v) ? v : NaN);
 
 // ---- app ----
@@ -185,52 +178,43 @@ function validate(s, score, levels, hints, now) {
   return null;
 }
 
-app.post("/session/progress", rateLimit("progress", 1500, 600), async (req, res) => {
+async function applyState(req, res, isFinal) {
   const { s, err } = await loadSession(req.body);
   if (err) return res.status(400).json({ ok: false, error: err });
-  if (s.final || s.submitted) return res.status(409).json({ ok: false, error: "session_closed" });
+  if (s.final || s.submitted) return res.status(409).json({ ok: false, error: isFinal ? "already_submitted" : "session_closed" });
+  if (s.rejected) return res.status(422).json({ ok: false, error: "run_failed_validation:" + s.rejected });
   const now = Date.now();
   const score = int(req.body.score), levels = int(req.body.levelsCompleted), hints = int(req.body.hintsUsed);
   const bad = validate(s, score, levels, hints, now);
   if (bad) { s.rejected = bad; await store.set(K.sess(s.id), JSON.stringify(s), SESSION_TTL_S); return res.status(422).json({ ok: false, error: bad }); }
   if (levels > s.levels) for (let i = s.levels; i < levels; i++) s.checkpoints.push(now);
   Object.assign(s, { score, levels, hints, updatedAt: now });
-  let firstFinisher = false;
-  if (req.body.final === true) {
-    s.final = true;
-    s.reason = req.body.reason === "completed" ? "completed" : "out_of_lives";
-    if (levels === G.LEVELS) firstFinisher = await store.setNX(K.first, s.id);
-    s.first = firstFinisher;
+  if (!isFinal) {
+    await store.set(K.sess(s.id), JSON.stringify(s), SESSION_TTL_S);
+    return res.json({ ok: true, adjustedScore: score - G.HINT_PENALTY * hints });
   }
+  // Final, automatic submission (no name/input). One per session.
+  s.final = true; s.submitted = true;
+  s.reason = req.body.reason === "completed" && levels === G.LEVELS ? "completed" : "out_of_lives";
+  s.first = levels === G.LEVELS ? await store.setNX(K.first, s.id) : false;
   await store.set(K.sess(s.id), JSON.stringify(s), SESSION_TTL_S);
-  res.json({ ok: true, firstFinisher, adjustedScore: score - G.HINT_PENALTY * hints });
-});
-
-app.post("/score", rateLimit("score", 200, 600), async (req, res) => {
-  const { s, err } = await loadSession(req.body);
-  if (err) return res.status(400).json({ ok: false, error: err });
-  if (s.submitted) return res.status(409).json({ ok: false, error: "already_submitted" });
-  if (s.rejected) return res.status(422).json({ ok: false, error: "run_failed_validation:" + s.rejected });
-  if (!s.final) return res.status(409).json({ ok: false, error: "game_not_finished" });
-  const name = cleanName(req.body.name);
-  if (!name) return res.status(400).json({ ok: false, error: "bad_name" });
-  // Optional re-check if the client re-sends its final numbers: they must match the server record.
-  if (req.body.score !== undefined && int(req.body.score) !== s.score) return res.status(422).json({ ok: false, error: "score_mismatch" });
-  s.submitted = true;
-  await store.set(K.sess(s.id), JSON.stringify(s), SESSION_TTL_S);
-  const entry = { id: s.id, name, score: s.score, hints: s.hints, levels: s.levels, adjusted: s.score - G.HINT_PENALTY * s.hints,
-                  first: !!s.first, at: Date.now(), duration_s: Math.round(((s.updatedAt || Date.now()) - s.t0) / 1000) };
+  const entry = { id: s.id, score, hints, levels, adjusted: score - G.HINT_PENALTY * hints, first: !!s.first,
+                  at: now, duration_s: Math.round((now - s.t0) / 1000) };
   await store.hset(K.entries, s.id, JSON.stringify(entry));
   const all = await sorted();
-  res.json({ ok: true, entry: publicEntry(entry), rank: all.findIndex((e) => e.id === s.id) + 1 });
-});
+  res.json({ ok: true, firstFinisher: !!s.first, adjustedScore: entry.adjusted, rank: all.findIndex((e) => e.id === s.id) + 1, total: all.length });
+}
+// Per-level checkpoint (game.js levelDone)
+app.post("/session/progress", rateLimit("progress", 1500, 600), (req, res, next) => applyState(req, res, false).catch(next));
+// Final score at game over — saved automatically, no name required
+app.post("/score", rateLimit("score", 300, 600), (req, res, next) => applyState(req, res, true).catch(next));
 
 async function sorted() {
   const h = await store.hgetall(K.entries);
   return Object.values(h).map((v) => JSON.parse(v))
     .sort((a, b) => b.adjusted - a.adjusted || b.score - a.score || a.hints - b.hints || a.at - b.at);
 }
-const publicEntry = (e) => ({ name: e.name, score: e.score, hints: e.hints, levels: e.levels, adjusted: e.adjusted, first: e.first, at: e.at });
+const publicEntry = (e) => ({ score: e.score, hints: e.hints, levels: e.levels, adjusted: e.adjusted, first: e.first, at: e.at });
 
 app.get("/leaderboard", async (req, res) => {
   const all = await sorted();
@@ -247,13 +231,12 @@ function admin(req, res, next) {
   next();
 }
 app.post("/admin/delete", admin, async (req, res) => {
-  const name = typeof req.body.name === "string" ? req.body.name : "";
-  const prefix = typeof req.body.prefix === "string" && req.body.prefix.length >= 3 ? req.body.prefix : null;
+  // body: { at: <entry timestamp ms> } — deletes the entry with that timestamp
+  const at = int(req.body.at);
   const h = await store.hgetall(K.entries);
   let removed = 0;
   for (const [id, v] of Object.entries(h)) {
-    const e = JSON.parse(v);
-    if (e.name === name || (prefix && e.name.startsWith(prefix))) { await store.hdel(K.entries, id); removed++; if ((await store.get(K.first)) === id) await store.del(K.first); }
+    if (JSON.parse(v).at === at) { await store.hdel(K.entries, id); removed++; if ((await store.get(K.first)) === id) await store.del(K.first); }
   }
   res.json({ ok: true, removed });
 });
@@ -268,4 +251,4 @@ if (require.main === module) {
   const port = process.env.PORT || 10000;
   app.listen(port, () => console.log("mango-catch-api listening on", port, "store:", store.kind, "origins:", ALLOWED.join(",")));
 }
-module.exports = { app, plausibleMax, maxScoreFor, cleanName };
+module.exports = { app, plausibleMax, maxScoreFor };

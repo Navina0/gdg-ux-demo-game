@@ -27,7 +27,7 @@ Task: Give exactly 3 UX improvement suggestions, ranked by expected impact. For 
 ## Filled example (the 15 simulated sample sessions)
 
 ```
-You are a senior mobile UX researcher. Below is product analytics from a 1–3 minute casual mobile web game, "Mango Catch" (tap falling mangoes, avoid chillies; 3 levels × 20 s; opened from a QR code; no install).
+You are a senior mobile UX researcher. Below is product analytics from a 1–3 minute casual mobile web game, "Mango Catch" (tap falling mangoes, avoid chillies; 3 levels × 60 s; opened from a QR code; no install).
 
 UI context: Start button on the start screen; a bottom bar with Pause, Hint, Sound and Restart; Share score + Play again on the game-over screen; a Tamil/English language switch is a tiny low-contrast "EN · த" button in the bottom-right corner. Audience: event attendees in Tamil Nadu, India.
 

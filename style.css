@@ -26,3 +26,7 @@ html,body{margin:0;height:100%;overflow:hidden;font-family:system-ui,-apple-syst
 #foot{position:absolute;bottom:62px;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:0 8px;z-index:6;pointer-events:none}
 .credit{font-size:10px;opacity:.45;color:#123}
 #btnLang{pointer-events:auto;font-size:10px;padding:3px 6px;border:1px solid #0002;border-radius:6px;background:#ffffff40;color:#123a;opacity:.6}
+/* leaderboard additions */
+.first-msg{background:#fff3c4;border:2px solid #f4b400;border-radius:12px;padding:8px 10px;font-weight:800;margin:6px 0}
+.status{font-size:13px;min-height:1em;margin:6px 0 0;color:#1b5e20}
+.status.err{color:#c62828}

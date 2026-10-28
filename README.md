@@ -7,7 +7,7 @@ deliberately under-discoverable feature: the tiny **EN · த** Tamil/English la
 
 | File | What |
 |---|---|
-| `index.html`, `game.js`, `style.css`, `i18n.js` | The game (3 levels × 20 s; Start, Pause/Resume, Hint, Sound, Restart, Share, Play again, language switch) |
+| `index.html`, `game.js`, `style.css`, `i18n.js` | The game (3 levels × 60 s; Start, Pause/Resume, Hint, Sound, Restart, Share, Play again, language switch) |
 | `config.js` | **The one place to set the Mixpanel token** (placeholder `YOUR_MIXPANEL_PROJECT_TOKEN`) + optional Firebase hook |
 | `analytics.js` | `track()` wrapper → Mixpanel (if a real token) + local log for the dashboard |
 | `dashboard.html` / `dashboard.js` | Built-in analytics page: feature usage %, drop-off funnel, auto-filled AI prompt. Tabs: Sample / This device / Combined |
@@ -40,3 +40,22 @@ Without a token the game works normally and `dashboard.html` shows the sample da
 
 ## Firebase Analytics (optional)
 Paste your web-app config into `FIREBASE_CONFIG` in `config.js`; `analytics.js` then mirrors every `track()` into `logEvent()`. Off by default.
+
+## Leaderboard (server-validated)
+
+- Page: `leaderboard.html` — Rank, Score, Hint clicks, Adjusted, Levels. **No names are collected**; the score is
+  saved automatically at game over. Ranking uses **Adjusted = Score − 5 × Hint clicks**, so a high scorer who
+  leaned on hints ranks lower (the "data-driven feature decision" demo point). Auto-refreshes every 10 s for a
+  projector. The first player ever to finish all 3 levels gets a 🏁 First finisher badge and an on-screen message.
+- API: `server/` (Node + Express) on a free Render web service `mango-catch-api`
+  (https://mango-catch-api.onrender.com), storing data in a free Render Key Value instance `mango-catch-kv`.
+  Secrets live only in Render env vars (`REDIS_URL`, `SESSION_SECRET`, `ADMIN_KEY`, `ALLOWED_ORIGIN`).
+- Endpoints: `GET /health`, `POST /session/start`, `POST /session/progress` (after each level),
+  `POST /score` (game over, automatic), `GET /leaderboard`, `POST /admin/reset` (header `X-Admin-Key`).
+- Anti-tamper: signed sessions with a server start time; ≥ 60 s per completed level (server clock);
+  score capped by what the game can spawn in the elapsed time (spawn rate, gold +3, 6σ allowance);
+  values can't go backwards; one final submission per session; per-IP rate limits; CORS + Origin check
+  for https://navina0.github.io only. A browser game can never be fully cheat-proof — this is server-validated,
+  not cheat-proof.
+- Free Render services sleep after ~15 min idle; the game pings `/health` on load and the leaderboard shows
+  "Waking up the server…". Keep the leaderboard open on the projector and the server stays awake.

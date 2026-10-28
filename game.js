@@ -86,6 +86,8 @@
   function levelDone() {
     st.running = false; clearItems();
     track("level_completed", { level: st.level, score: st.score, lives_left: st.lives });
+    // leaderboard: per-level save to the server (the final level is saved by endGame)
+    if (window.LB && st.level < C.LEVELS) LB.progress({ score: st.score, levelsCompleted: st.level, hintsUsed: st.hintsUsed });
     if (st.level >= C.LEVELS) return endGame("completed");
     st.level++; beep(880, 0.3);
     $("levelUpText").textContent = t("nextLevel", { n: st.level }); show("levelUp", true);
@@ -96,6 +98,7 @@
     st.level = 1; st.score = 0; st.lives = C.LIVES; st.hintsUsed = 0; st.startedAt = Date.now();
     clearItems(); ["start", "over", "paused", "levelUp"].forEach(function (id) { show(id, false); });
     track("game_started", { via: via || "start_button", sound_on: st.sound });
+    if (window.LB) LB.beginRun();
     startLevel();
   }
 
@@ -108,6 +111,30 @@
     $("overTitle").textContent = t(reason === "completed" ? "youWon" : "gameOver");
     $("overReason").textContent = reason === "completed" ? "" : t("outOfLives");
     $("finalScore").textContent = st.score; show("over", true);
+    saveScore(reason, reason === "completed" ? C.LEVELS : st.level - 1);
+  }
+
+  // ---------- leaderboard: automatic, silent save at game over (no name / input) ----------
+  var runSeq = 0;
+  function saveScore(reason, levelsCompleted) {
+    var my = ++runSeq, status = $("submitStatus"), first = $("firstMsg");
+    first.hidden = true; status.className = "status"; status.textContent = "";
+    if (!window.LB || !LB.api) return;
+    var score = st.score, hints = st.hintsUsed;
+    status.textContent = t("saving");
+    LB.finish({ score: score, levelsCompleted: levelsCompleted, hintsUsed: hints, reason: reason }).then(function (r) {
+      var current = my === runSeq && $("over").classList.contains("show");
+      if (r && r.ok) {
+        track("score_submitted", { score: score, hints_used: hints, levels_completed: levelsCompleted,
+                                   adjusted_score: r.adjustedScore, rank: r.rank, auto_saved: true });
+        if (r.firstFinisher) track("first_finisher", { score: score, hints_used: hints, adjusted_score: r.adjustedScore });
+        if (current) { status.textContent = t("saved", { n: r.rank }); if (r.firstFinisher) { first.textContent = t("firstFinisher"); first.hidden = false; } }
+      } else {
+        var err = (r && r.error) || "offline";
+        track("score_rejected", { error: err, score: score, hints_used: hints, levels_completed: levelsCompleted, auto_saved: true });
+        if (current) { status.className = "status err"; status.textContent = /validation|too_fast|implausible|backwards/.test(err) ? t("notVerified") : t("saveFailed", { e: err }); }
+      }
+    });
   }
 
   // ---------- feature buttons (each one tracked) ----------

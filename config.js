@@ -11,6 +11,9 @@
  */
 window.GAME_CONFIG = {
   // ⚠️ PLACEHOLDER — not a real token. Replace with your Mixpanel project token.
+  // TODO(Mixpanel): this is STILL the placeholder, so nothing reaches Mixpanel yet.
+  //   Either paste your Project Token here, or open the game / leaderboard once with
+  //   ?mp_token=YOUR_TOKEN (remembered on that device in localStorage).
   MIXPANEL_TOKEN: "YOUR_MIXPANEL_PROJECT_TOKEN",
 
   // Mixpanel ingestion host. Use "https://api-eu.mixpanel.com" for EU-residency
@@ -25,6 +28,11 @@ window.GAME_CONFIG = {
 
   GAME_NAME: "mango_catch",
   LEVELS: 3,
-  LEVEL_SECONDS: 20,
-  LIVES: 3
+  LEVEL_SECONDS: 60,   // 3 levels × 60 s = 3 minutes (the server validates against 60 s too)
+  LIVES: 3,
+
+  // Leaderboard API (Render free web service, code in /server). Scores are validated
+  // server-side; the browser never sees any database credentials.
+  LEADERBOARD_API: "https://mango-catch-api.onrender.com",
+  HINT_PENALTY: 5      // adjusted score = score − 5 × hint clicks (must match server)
 };

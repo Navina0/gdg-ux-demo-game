@@ -12,7 +12,7 @@
   <header id="hud">
     <div class="stat"><span data-i18n="score">Score</span> <b id="score">0</b></div>
     <div class="stat"><span data-i18n="level">Level</span> <b id="level">1</b>/<span id="levels">3</span></div>
-    <div class="stat"><span data-i18n="time">Time</span> <b id="time">20</b></div>
+    <div class="stat"><span data-i18n="time">Time</span> <b id="time">60</b></div>
     <div class="stat" id="lives">❤️❤️❤️</div>
   </header>
 
@@ -31,9 +31,10 @@
       <div class="big">🥭</div>
       <h1 data-i18n="title">Mango Catch</h1>
       <p data-i18n="tagline">Tap the mangoes, avoid the chillies!</p>
-      <p class="how" data-i18n="how">Tap 🥭 = +1, glowing 🥭 = +3, 🌶️ = lose a life. 3 levels, 20 seconds each.</p>
+      <p class="how" data-i18n="how">Tap 🥭 = +1, glowing 🥭 = +3, 🌶️ = lose a life. 3 levels, 60 seconds each.</p>
       <button id="btnStart" class="primary" data-i18n="start">Start</button>
       <p class="best"><span data-i18n="best">Best</span>: <b id="bestScore">0</b></p>
+      <p class="small"><a id="lnkLbStart" href="leaderboard.html?from=start" data-i18n="lbLink">🏆 Leaderboard</a></p>
     </div>
   </section>
 
@@ -54,9 +55,11 @@
       <h2 id="overTitle">Game Over</h2>
       <p id="overReason"></p>
       <div class="big" id="finalScore">0</div>
+      <p id="firstMsg" class="first-msg" data-i18n="firstFinisher" hidden>🥇 You are the first to finish all 3 levels!</p>
+      <p id="submitStatus" class="status"></p>
       <button id="btnShare" class="primary" data-i18n="share">Share score</button>
       <button id="btnAgain" class="secondary" data-i18n="playAgain">Play again</button>
-      <p class="small"><a href="dashboard.html" data-i18n="seeData">See the analytics →</a></p>
+      <p class="small"><a id="lnkLbOver" href="leaderboard.html?from=game_over" data-i18n="viewLb">View leaderboard →</a> · <a href="dashboard.html" data-i18n="seeData">See the analytics →</a></p>
     </div>
   </section>
 
@@ -71,6 +74,7 @@
 <script src="config.js"></script>
 <script src="analytics.js"></script>
 <script src="i18n.js"></script>
+<script src="lb.js"></script>
 <script src="game.js"></script>
 </body>
 </html>
