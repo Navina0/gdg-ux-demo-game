@@ -20,10 +20,15 @@ window.GAME_CONFIG = {
   // projects or "https://api-in.mixpanel.com" for India-residency projects.
   MIXPANEL_API_HOST: "https://api-js.mixpanel.com",
 
-  // Optional Firebase Analytics hook (disabled). To enable, paste your web app
-  // config object from Firebase console → Project settings → Your apps, e.g.
-  // FIREBASE_CONFIG: { apiKey: "...", authDomain: "...", projectId: "...",
-  //                    appId: "...", measurementId: "G-XXXXXXX" },
+  // Firebase (Firestore score store + Firebase Analytics). null = not connected yet.
+  // TODO(Firebase): paste your web app config from Firebase console → Project settings →
+  //   Your apps → Web app → "SDK setup and configuration" → Config, e.g.
+  // FIREBASE_CONFIG: { apiKey: "...", authDomain: "xxx.firebaseapp.com", projectId: "xxx",
+  //                    storageBucket: "xxx.appspot.com", messagingSenderId: "...",
+  //                    appId: "1:...:web:...", measurementId: "G-XXXXXXX" },
+  // (This config is public by design — security comes from firestore.rules.)
+  // While it is null, scores go to the Render API below; if that is unreachable,
+  // the leaderboard runs in demo mode (dummy players + this device's scores).
   FIREBASE_CONFIG: null,
 
   GAME_NAME: "mango_catch",

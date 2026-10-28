@@ -140,7 +140,7 @@ app.get("/health", async (req, res) => {
 app.post("/session/start", rateLimit("start", 300, 600), async (req, res) => {
   const id = crypto.randomBytes(12).toString("base64url");
   const t0 = Date.now();
-  const sess = { id, t0, ip: ipOf(req), levels: 0, score: 0, hints: 0, checkpoints: [t0], final: false, submitted: false, first: false };
+  const sess = { id, t0, ip: ipOf(req), levels: 0, score: 0, hints: 0, checkpoints: [t0], marks: [0], final: false, submitted: false, first: false };
   await store.set(K.sess(id), JSON.stringify(sess), SESSION_TTL_S);
   res.json({ ok: true, sessionId: id, sig: sign(id, t0), serverStart: t0, levelSeconds: G.LEVEL_SECONDS, hintPenalty: G.HINT_PENALTY });
 });
@@ -187,7 +187,7 @@ async function applyState(req, res, isFinal) {
   const score = int(req.body.score), levels = int(req.body.levelsCompleted), hints = int(req.body.hintsUsed);
   const bad = validate(s, score, levels, hints, now);
   if (bad) { s.rejected = bad; await store.set(K.sess(s.id), JSON.stringify(s), SESSION_TTL_S); return res.status(422).json({ ok: false, error: bad }); }
-  if (levels > s.levels) for (let i = s.levels; i < levels; i++) s.checkpoints.push(now);
+  if (levels > s.levels) for (let i = s.levels; i < levels; i++) { s.checkpoints.push(now); (s.marks = s.marks || [0]).push(score); }
   Object.assign(s, { score, levels, hints, updatedAt: now });
   if (!isFinal) {
     await store.set(K.sess(s.id), JSON.stringify(s), SESSION_TTL_S);
@@ -198,11 +198,17 @@ async function applyState(req, res, isFinal) {
   s.reason = req.body.reason === "completed" && levels === G.LEVELS ? "completed" : "out_of_lives";
   s.first = levels === G.LEVELS ? await store.setNX(K.first, s.id) : false;
   await store.set(K.sess(s.id), JSON.stringify(s), SESSION_TTL_S);
-  const entry = { id: s.id, score, hints, levels, adjusted: score - G.HINT_PENALTY * hints, first: !!s.first,
+  // per-level scores from the server-recorded level checkpoints
+  const marks = s.marks || [0], levelScores = [0, 0, 0];
+  for (let i = 0; i < G.LEVELS; i++) {
+    if (i < levels) levelScores[i] = Math.max(0, (marks[i + 1] || 0) - (marks[i] || 0));
+    else if (i === levels) levelScores[i] = Math.max(0, score - (marks[levels] || 0));
+  }
+  const entry = { id: s.id, pid: pidOf(s.id), level_scores: levelScores, score, hints, levels, adjusted: score - G.HINT_PENALTY * hints, first: !!s.first,
                   at: now, duration_s: Math.round((now - s.t0) / 1000) };
   await store.hset(K.entries, s.id, JSON.stringify(entry));
   const all = await sorted();
-  res.json({ ok: true, firstFinisher: !!s.first, adjustedScore: entry.adjusted, rank: all.findIndex((e) => e.id === s.id) + 1, total: all.length });
+  res.json({ ok: true, pid: entry.pid, levelScores, firstFinisher: !!s.first, adjustedScore: entry.adjusted, rank: all.findIndex((e) => e.id === s.id) + 1, total: all.length });
 }
 // Per-level checkpoint (game.js levelDone)
 app.post("/session/progress", rateLimit("progress", 1500, 600), (req, res, next) => applyState(req, res, false).catch(next));
@@ -214,7 +220,8 @@ async function sorted() {
   return Object.values(h).map((v) => JSON.parse(v))
     .sort((a, b) => b.adjusted - a.adjusted || b.score - a.score || a.hints - b.hints || a.at - b.at);
 }
-const publicEntry = (e) => ({ score: e.score, hints: e.hints, levels: e.levels, adjusted: e.adjusted, first: e.first, at: e.at });
+const pidOf = (id) => crypto.createHash("sha256").update("pid:" + id).digest("hex").slice(0, 12);
+const publicEntry = (e) => ({ pid: e.pid || pidOf(e.id), levelScores: e.level_scores || [0, 0, 0], score: e.score, hints: e.hints, levels: e.levels, adjusted: e.adjusted, first: e.first, at: e.at });
 
 app.get("/leaderboard", async (req, res) => {
   const all = await sorted();

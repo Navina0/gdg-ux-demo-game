@@ -1,6 +1,6 @@
 # Mango Catch — GDG "Beyond the UI: How AI can help increase user experience" demo
 
-**Play:** https://navina0.github.io/gdg-ux-demo-game/ · **Dashboard:** https://navina0.github.io/gdg-ux-demo-game/dashboard.html · QR: `qr.svg` (served from the `gh-pages` branch — push changes there)
+**Scan page (QR target):** https://navina0.github.io/gdg-ux-demo-game/scan.html?utm_source=qr · **Play:** https://navina0.github.io/gdg-ux-demo-game/ · **Leaderboard:** https://navina0.github.io/gdg-ux-demo-game/leaderboard.html · **Dashboard:** https://navina0.github.io/gdg-ux-demo-game/dashboard.html · QR: `qr.svg` / `qr.png` → scan.html (served from the `gh-pages` branch — push changes there)
 
 A 1–3 minute mobile web game (no install, open from a QR code) instrumented with Mixpanel, with one
 deliberately under-discoverable feature: the tiny **EN · த** Tamil/English language switch in the bottom-right corner.
@@ -59,3 +59,40 @@ Paste your web-app config into `FIREBASE_CONFIG` in `config.js`; `analytics.js` 
   not cheat-proof.
 - Free Render services sleep after ~15 min idle; the game pings `/health` on load and the leaderboard shows
   "Waking up the server…". Keep the leaderboard open on the projector and the server stays awake.
+
+## Scan page, dummy players and score stores
+
+- `scan.html` is the QR entry page: big **Play** button + live board (total players split real / dummy,
+  top 10 overall, top 5 per level). Every player is a cartoon mango avatar generated from their id (`avatar.js`) — no names.
+- `dummy_players.json`: 8 sample players merged client-side, always shown with a **DUMMY / மாதிரி** tag and
+  counted separately. They are never written to any store. Edit or empty the list to change/remove them.
+- `scores.js` picks the store:
+  1. `FIREBASE_CONFIG` set in `config.js` → **Cloud Firestore**, collection `scores` (live via `onSnapshot`).
+  2. otherwise → the **Render API** above (server-validated).
+  3. Render unreachable → **demo mode**: dummy players + scores saved on this device, with a "Firebase not connected yet" note.
+
+### Firestore document (`scores/<session>_p1`, `<session>_p2` after each level, `<session>_final` at game over)
+`session_id` (24 hex), `score` (int), `hints_used` (int), `level` (levels completed 0–3), `level_scores` ([L1, L2, L3] ints),
+`final` (bool), `dummy` (always false), `started_at` (timestamp), `created_at` (`serverTimestamp()`).
+The leaderboard groups docs by `session_id` and uses the final doc (or the latest checkpoint if the tab was closed).
+
+### Connect Firebase (manual, ~10 min, free Spark plan)
+1. https://console.firebase.google.com → **Add project** (Google Analytics on if you want Firebase Analytics).
+2. Project overview → **Web app (</>)** → register → copy the `firebaseConfig` object.
+3. Paste it into `config.js` as `FIREBASE_CONFIG: { ... }` (it's public by design; `measurementId` enables Firebase Analytics,
+   which then receives every `track()` event alongside Mixpanel). Commit to `main` and `gh-pages`.
+4. Build → **Firestore Database** → Create database → **Production mode**, location e.g. **asia-south1 (Mumbai)**.
+5. Firestore → **Rules** → paste `firestore.rules` → **Publish** (or `firebase deploy --only firestore:rules` with `firebase.json`).
+6. Optional hardening: **App Check** with reCAPTCHA Enterprise for the web app, then *Enforce* for Firestore
+   (needs a few lines of App Check init code added to `scores.js`).
+7. Test: play one round → scan.html shows "1 real"; the doc appears under Firestore → Data → `scores`.
+   Delete test docs in the console (clients can't delete).
+
+### Honesty / caveats
+- Firestore client writes are **rule-validated, not cheat-proof**: the rules enforce types, allowed keys, per-level and total
+  score bounds from the game constants, `hints_used ≥ 0`, `dummy == false`, `created_at == request.time`, create-only, and
+  ≥ 60 s per completed level relative to `started_at` — but `started_at` is client-supplied, so a determined person can still
+  forge a plausible score. The Render API is stronger (server clock + signed sessions) but still not cheat-proof.
+- First finisher (Firestore) = the earliest real doc with `level == 3` (by server `created_at`). Two players finishing in the same
+  instant can both briefly see the message; the board then shows the badge only on the earliest.
+- Rules tests: `tests/firestore.rules.test.mjs` (Firestore emulator + `@firebase/rules-unit-testing`; 18 cases).

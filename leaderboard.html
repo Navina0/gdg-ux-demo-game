@@ -25,6 +25,10 @@ tr.top td{background:#fff8e1}
 .spin{display:inline-block;width:18px;height:18px;border:3px solid #c8e6c9;border-top-color:#1b5e20;border-radius:50%;animation:s 1s linear infinite;vertical-align:-4px;margin-right:6px}
 @keyframes s{to{transform:rotate(360deg)}}
 .meta{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;color:#567;margin-top:10px;flex-wrap:wrap}
+.who{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center}
+.mango-av{flex:none;filter:drop-shadow(0 2px 2px rgba(0,0,0,.2))}
+.dtag{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;background:#eceff1;color:#455a64;border:1px dashed #90a4ae;border-radius:6px;padding:1px 6px}
+tr.dummy td{color:#607d8b}
 .back{display:block;text-align:center;margin-top:14px;font-weight:800;color:#fff;background:#ff9800;border-radius:14px;padding:14px;text-decoration:none}
 @media(min-width:900px){body{font-size:20px}table{font-size:22px}h1{font-size:40px}.wrap{max-width:960px}}
 </style>
@@ -44,11 +48,14 @@ tr.top td{background:#fff8e1}
     </table>
     <div class="meta"><span id="count"></span><span id="updated"></span></div>
   </div>
+  <a class="back" href="scan.html" style="background:#43a047;margin-top:10px" data-i18n="liveBoard">🥭 Live board</a>
   <a class="back" href="./" data-i18n="backToGame">← Play Mango Catch</a>
 </div>
 <script src="config.js"></script>
 <script src="analytics.js"></script>
 <script src="i18n.js"></script>
+<script src="avatar.js"></script>
+<script src="scores.js"></script>
 <script src="leaderboard.js"></script>
 </body>
 </html>

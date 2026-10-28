@@ -5,7 +5,8 @@
  * /score at game over. All validation happens on the server. */
 (function () {
   var C = window.GAME_CONFIG || {};
-  var API = (C.LEADERBOARD_API || "").replace(/\/+$/, "");
+  // Render API is only used while Firebase is not configured (see scores.js).
+  var API = C.FIREBASE_CONFIG ? "" : (C.LEADERBOARD_API || "").replace(/\/+$/, "");
 
   function call(path, body, ms) {
     var ctl = window.AbortController ? new AbortController() : null;

@@ -37,16 +37,18 @@
     document.head.appendChild(s);
   }
 
-  /* ---- Optional Firebase Analytics hook (off unless FIREBASE_CONFIG set) ----
+  /* ---- Firebase Analytics (on when FIREBASE_CONFIG with a measurementId is set) ----
    * Uses the modular CDN build. Each track() call is mirrored via logEvent(). */
-  var fbLog = null;
-  if (cfg.FIREBASE_CONFIG) {
+  var fbLog = null, fbQueue = [];
+  if (cfg.FIREBASE_CONFIG && cfg.FIREBASE_CONFIG.measurementId) {
     import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js").then(function (app) {
       return import("https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js").then(function (an) {
-        var a = an.getAnalytics(app.initializeApp(cfg.FIREBASE_CONFIG));
+        var fa = app.getApps().length ? app.getApp() : app.initializeApp(cfg.FIREBASE_CONFIG); // shared with scores.js
+        var a = an.getAnalytics(fa);
         fbLog = function (n, p) { an.logEvent(a, n, p); };
+        fbQueue.forEach(function (q) { try { fbLog(q[0], q[1]); } catch (e) {} }); fbQueue = [];
       });
-    }).catch(function (e) { console.warn("Firebase disabled:", e); });
+    }).catch(function (e) { console.warn("Firebase Analytics disabled:", e); });
   }
 
   function localLog(name, props) {
@@ -61,7 +63,7 @@
   window.track = function (name, props) {
     props = Object.assign({ lang: (window.currentLang || "en") }, props || {});
     localLog(name, props);
-    if (fbLog) { try { fbLog(name, props); } catch (e) {} }
+    if (fbLog) { try { fbLog(name, props); } catch (e) {} } else if (cfg.FIREBASE_CONFIG && cfg.FIREBASE_CONFIG.measurementId && fbQueue.length < 200) fbQueue.push([name, props]);
     if (!mpEnabled) return;
     if (window.mixpanel && window.mixpanel.track && window.mixpanel.__loaded) window.mixpanel.track(name, props);
     else queue.push([name, props]);

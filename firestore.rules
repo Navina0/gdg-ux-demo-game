@@ -1,0 +1,54 @@
+rules_version = '2';
+// Mango Catch leaderboard — Cloud Firestore security rules.
+// Public read; create-only writes with strict validation; no updates or deletes from clients.
+// Bounds come from the game constants (3 levels × 60 s, spawn rate, gold mango = +3) — the same
+// plausible-max formula as server/index.js: level 1 ≤ 141, level 2 ≤ 167, level 3 ≤ 210, total ≤ 518.
+// NOTE: client writes are rule-validated, NOT cheat-proof. Someone can still write a plausible fake
+// score with their own script. Optional hardening: Firebase App Check (reCAPTCHA Enterprise) + enforce.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function validLevelScores(d) {
+      return d.level_scores is list && d.level_scores.size() == 3
+        && d.level_scores[0] is int && d.level_scores[0] >= 0 && d.level_scores[0] <= 141
+        && d.level_scores[1] is int && d.level_scores[1] >= 0 && d.level_scores[1] <= 167
+        && d.level_scores[2] is int && d.level_scores[2] >= 0 && d.level_scores[2] <= 210
+        && d.level_scores[0] + d.level_scores[1] + d.level_scores[2] == d.score
+        // levels not reached yet must be 0 (level = levels completed; index `level` is the partial one)
+        && (d.level >= 1 || d.level_scores[1] == 0)
+        && (d.level >= 2 || d.level_scores[2] == 0);
+    }
+
+    function validScore(d, docId) {
+      return d.keys().hasOnly(['session_id', 'score', 'hints_used', 'level', 'level_scores',
+                               'final', 'dummy', 'started_at', 'created_at'])
+        && d.keys().hasAll(['session_id', 'score', 'hints_used', 'level', 'level_scores',
+                            'final', 'dummy', 'started_at', 'created_at'])
+        && d.session_id is string && d.session_id.matches('^[a-f0-9]{24}$')
+        && d.final is bool
+        // one doc per session per checkpoint: <session>_p1, <session>_p2 (after levels) and <session>_final
+        && ((d.final == true && docId == d.session_id + '_final')
+            || (d.final == false && d.level >= 1 && d.level <= 2 && docId == d.session_id + '_p' + string(d.level)))
+        && d.dummy == false                       // dummies only ever come from dummy_players.json
+        && d.created_at == request.time           // must be serverTimestamp()
+        && d.started_at is timestamp
+        && d.started_at <= request.time
+        && d.started_at > request.time - duration.value(2, 'h')
+        && d.level is int && d.level >= 0 && d.level <= 3
+        && d.score is int && d.score >= 0 && d.score <= 518
+        && d.hints_used is int && d.hints_used >= 0 && d.hints_used <= 500
+        && validLevelScores(d)
+        // cannot finish N levels faster than N × 60 s (8 s tolerance; started_at is client-supplied)
+        && request.time >= d.started_at + duration.value(d.level * 60 - 8, 's');
+    }
+
+    match /scores/{docId} {
+      allow read: if true;
+      allow create: if validScore(request.resource.data, docId);
+      allow update, delete: if false;
+    }
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

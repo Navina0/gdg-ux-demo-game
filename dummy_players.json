@@ -1,0 +1,13 @@
+{
+  "_note": "Sample players shown so the leaderboard never looks empty. They are always labelled DUMMY and never stored in Firestore/Render. Delete entries here (or set an empty list) to remove them.",
+  "players": [
+    { "pid": "dummy-alphonso", "score": 142, "hints": 4, "levels": 3, "levelScores": [44, 46, 52] },
+    { "pid": "dummy-banganapalli", "score": 118, "hints": 0, "levels": 3, "levelScores": [38, 39, 41] },
+    { "pid": "dummy-neelam", "score": 96, "hints": 1, "levels": 3, "levelScores": [35, 30, 31] },
+    { "pid": "dummy-totapuri", "score": 74, "hints": 2, "levels": 2, "levelScores": [33, 29, 12] },
+    { "pid": "dummy-imampasand", "score": 61, "hints": 6, "levels": 2, "levelScores": [28, 25, 8] },
+    { "pid": "dummy-malgova", "score": 40, "hints": 0, "levels": 1, "levelScores": [27, 13, 0] },
+    { "pid": "dummy-rumani", "score": 22, "hints": 3, "levels": 1, "levelScores": [18, 4, 0] },
+    { "pid": "dummy-kesar", "score": 9, "hints": 0, "levels": 0, "levelScores": [9, 0, 0] }
+  ]
+}

@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ff9800">
+<title>Mango Catch · Play & live leaderboard</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥭</text></svg>">
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:"Baloo 2","Comic Sans MS","Chalkboard SE","Noto Sans Tamil",system-ui,sans-serif;color:#3b2200;
+  background:radial-gradient(circle at 85% 6%,#fff59d 0 60px,transparent 61px),linear-gradient(#7fd3ff 0,#bdf0ff 38%,#c5f29a 70%,#6cc24a 100%) fixed}
+.wrap{max-width:760px;margin:0 auto;padding:12px 12px 28px}
+.top{display:flex;justify-content:space-between;align-items:center}
+.live{font-weight:900;font-size:12px;background:#e53935;color:#fff;border-radius:999px;padding:3px 10px;letter-spacing:.08em;box-shadow:0 2px 0 #8e0000}
+.live:before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:#fff;margin-right:6px;animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.2}}
+#btnLang{font:inherit;font-size:12px;border:2px solid #3b2200;background:#fff;border-radius:999px;padding:2px 9px;cursor:pointer}
+.hero{text-align:center;margin:6px 0 10px}
+.faces{display:flex;justify-content:center;gap:4px;height:84px}
+.faces span{display:inline-block;animation:bob 1.6s ease-in-out infinite}
+.faces span:nth-child(2){animation-delay:.25s}.faces span:nth-child(3){animation-delay:.5s}
+@keyframes bob{50%{transform:translateY(-10px) rotate(-4deg)}}
+h1{margin:2px 0 0;font-size:40px;line-height:1.05;color:#fff;-webkit-text-stroke:2px #8a4b00;text-shadow:0 4px 0 #8a4b00}
+.sub{margin:6px 0 12px;font-size:16px;font-weight:700}
+.play{display:block;width:100%;max-width:420px;margin:0 auto;font:inherit;font-size:34px;font-weight:900;color:#fff;text-decoration:none;
+  background:linear-gradient(#ffb300,#ff6d00);border:4px solid #8a4b00;border-radius:26px;padding:14px 10px;box-shadow:0 8px 0 #8a4b00;animation:pulse 1.4s ease-in-out infinite}
+.play:active{transform:translateY(6px);box-shadow:0 2px 0 #8a4b00}
+@keyframes pulse{50%{transform:scale(1.04)}}
+.card{background:#fffdf5;border:3px solid #8a4b00;border-radius:22px;padding:12px;margin-top:14px;box-shadow:0 6px 0 rgba(138,75,0,.5)}
+h2{margin:0 0 8px;font-size:22px}
+.stats{display:flex;align-items:center;gap:12px}
+.big{font-size:46px;font-weight:900;line-height:1;color:#e65100}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-weight:800;font-size:14px;border-radius:999px;padding:3px 10px;border:2px solid}
+.chip.real{background:#e8f5e9;border-color:#2e7d32;color:#1b5e20}.chip.dum{background:#eceff1;border-color:#78909c;color:#37474f;border-style:dashed}
+.note{font-size:13.5px;font-weight:700;background:#fff3e0;border:2px dashed #ff9800;border-radius:14px;padding:8px 10px;margin-top:10px}
+.note[hidden]{display:none}
+.explain{font-size:13px;margin:-2px 0 8px;color:#6d4c41}
+ol{list-style:none;margin:0;padding:0}
+li.row{display:flex;align-items:center;gap:8px;padding:6px 6px;border-radius:14px;margin-bottom:5px;background:#fff;border:2px solid #ffe0b2}
+li.row.dummy{background:#f5f7f8;border:2px dashed #b0bec5}
+li.row.r1{background:#fff8d6;border-color:#f4b400}
+.rk{width:34px;text-align:center;font-weight:900;font-size:20px;flex:none}
+.mango-av{flex:none;filter:drop-shadow(0 2px 1px rgba(0,0,0,.25))}
+.info{flex:1;min-width:0}
+.sc{font-size:24px;font-weight:900;line-height:1}
+.meta{font-size:12.5px;font-weight:700;color:#6d4c41}
+.dtag{display:inline-block;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;background:#eceff1;color:#37474f;border:1.5px dashed #78909c;border-radius:6px;padding:0 6px;margin-left:6px;vertical-align:3px}
+.badge{display:inline-block;font-size:11px;font-weight:800;background:#fff3c4;border:1.5px solid #f4b400;border-radius:999px;padding:0 7px;margin-left:6px;vertical-align:3px}
+.adj{font-size:20px;font-weight:900;color:#2e7d32;text-align:right;flex:none}
+.adj small{display:block;font-size:10px;color:#6d4c41;font-weight:700}
+.levels{display:grid;grid-template-columns:1fr;gap:10px}
+.lv h3{margin:0 0 6px;font-size:17px}
+.lv li.row{padding:4px 6px}.lv .sc{font-size:19px}
+.empty{font-weight:700;color:#8d6e63;padding:6px}
+.foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;font-size:12px;font-weight:700;margin-top:10px}
+.foot a{color:#8a4b00}
+@media(min-width:700px){.levels{grid-template-columns:1fr 1fr 1fr}h1{font-size:54px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><span class="live" data-i18n="livePill">LIVE</span><button id="btnLang" aria-label="Change language">EN · த</button></div>
+  <div class="hero">
+    <div class="faces" id="faces"></div>
+    <h1 data-i18n="scanTitle">🥭 Mango Catch</h1>
+    <p class="sub" data-i18n="scanSub">Tap the mangoes, dodge the chillies — 3 levels × 60 s!</p>
+    <a class="play" id="btnPlay" href="./" data-i18n="play">▶ Play</a>
+  </div>
+
+  <div class="card">
+    <div class="stats">
+      <div class="big" id="total">–</div>
+      <div><h2 style="margin:0 0 4px" data-i18n="totalPlayers">Players</h2>
+        <div class="chips"><span class="chip real" id="cReal"></span><span class="chip dum" id="cDummy"></span></div></div>
+    </div>
+    <p class="note" id="note" hidden></p>
+  </div>
+
+  <div class="card">
+    <h2 data-i18n="topOverall">🏆 Top scores</h2>
+    <p class="explain" id="explain"></p>
+    <ol id="top"></ol>
+  </div>
+
+  <div class="card">
+    <div class="levels" id="levels"></div>
+  </div>
+
+  <div class="foot"><a href="leaderboard.html?from=scan" id="lnkFull" data-i18n="fullBoard">Full leaderboard →</a><span id="updated"></span></div>
+</div>
+<script src="config.js"></script>
+<script src="analytics.js"></script>
+<script src="i18n.js"></script>
+<script src="avatar.js"></script>
+<script src="scores.js"></script>
+<script src="scan.js"></script>
+</body>
+</html>
