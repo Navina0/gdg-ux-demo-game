@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mango Catch · UX Analytics (demo)</title>
+<style>
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#f4f6f8;color:#1d2a35}
+.wrap{max-width:900px;margin:0 auto;padding:16px}
+h1{font-size:22px;margin:6px 0}h2{font-size:17px;margin:0 0 10px}
+.banner{background:#fff3cd;border:1px solid #ffe08a;padding:10px 12px;border-radius:10px;font-size:14px}
+.tabs{display:flex;gap:6px;margin:14px 0;flex-wrap:wrap}
+.tabs button{border:1px solid #c9d3dc;background:#fff;padding:8px 12px;border-radius:20px;font-weight:600;cursor:pointer}
+.tabs button.on{background:#1b5e20;color:#fff;border-color:#1b5e20}
+.card{background:#fff;border-radius:14px;padding:16px;margin-bottom:14px;box-shadow:0 1px 4px #0001}
+.row{display:grid;grid-template-columns:190px 1fr 92px;align-items:center;gap:8px;margin:7px 0;font-size:14px}
+.bar{height:20px;background:#e9eef2;border-radius:10px;overflow:hidden}
+.fill{height:100%;background:#43a047;border-radius:10px}
+.row.under .fill{background:#e53935}.row.under{font-weight:700;color:#b71c1c}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.drop{font-size:12px;color:#b71c1c}
+textarea{width:100%;min-height:260px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;border-radius:10px;border:1px solid #c9d3dc;padding:10px;box-sizing:border-box}
+.btn{background:#1b5e20;color:#fff;border:0;padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer;margin-right:6px}
+.muted{color:#607080;font-size:13px}
+table{border-collapse:collapse;width:100%;font-size:12.5px}td,th{border-bottom:1px solid #eee;padding:4px 6px;text-align:left}
+@media(max-width:560px){.row{grid-template-columns:120px 1fr 70px;font-size:12.5px}}
+</style></head>
+<body><div class="wrap">
+<h1>🥭 Mango Catch — UX analytics</h1>
+<div class="banner">⚠️ <b>Sample / simulated data.</b> The "Sample" view is 15 simulated sessions (sample_sessions.json), not real users.
+"This device" shows real events logged locally by the game in this browser. <span id="mpStatus"></span></div>
+
+<div class="tabs" id="tabs">
+  <button data-src="sample" class="on">Sample (15 simulated sessions)</button>
+  <button data-src="local">This device (live)</button>
+  <button data-src="both">Combined</button>
+</div>
+
+<div class="card"><h2>Feature usage — % of sessions that tapped it at least once</h2>
+  <div id="features"></div>
+  <p class="muted">Red = the language switcher (Tamil/English), deliberately tucked into a tiny corner button.</p></div>
+
+<div class="card"><h2>Drop-off funnel</h2><div id="funnel"></div></div>
+
+<div class="card"><h2>🤖 Ask AI for UX improvements</h2>
+  <p class="muted">Auto-filled with the numbers above. Copy and paste into ChatGPT / Gemini.</p>
+  <textarea id="prompt" readonly></textarea><br><br>
+  <button class="btn" id="copy">Copy prompt</button><a class="btn" href="index.html" style="text-decoration:none">▶ Play the game</a>
+  <button class="btn" id="clear" style="background:#78909c">Clear this device's events</button>
+</div>
+
+<div class="card"><h2>Latest events (<span id="evSrc"></span>)</h2><div id="events" style="max-height:300px;overflow:auto"></div></div>
+</div>
+<script src="config.js"></script>
+<script src="dashboard.js"></script>
+</body></html>

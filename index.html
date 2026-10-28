@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#1b5e20">
+<title>Mango Catch · GDG UX Demo</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header id="hud">
+    <div class="stat"><span data-i18n="score">Score</span> <b id="score">0</b></div>
+    <div class="stat"><span data-i18n="level">Level</span> <b id="level">1</b>/<span id="levels">3</span></div>
+    <div class="stat"><span data-i18n="time">Time</span> <b id="time">20</b></div>
+    <div class="stat" id="lives">❤️❤️❤️</div>
+  </header>
+
+  <main id="field" aria-label="game area"></main>
+
+  <nav id="controls">
+    <button id="btnPause" class="ctl" data-i18n="pause">Pause</button>
+    <button id="btnHint" class="ctl" data-i18n="hint">Hint</button>
+    <button id="btnSound" class="ctl" data-i18n="soundOn">Sound: On</button>
+    <button id="btnRestart" class="ctl" data-i18n="restart">Restart</button>
+  </nav>
+
+  <!-- Start screen -->
+  <section id="start" class="overlay show">
+    <div class="card">
+      <div class="big">🥭</div>
+      <h1 data-i18n="title">Mango Catch</h1>
+      <p data-i18n="tagline">Tap the mangoes, avoid the chillies!</p>
+      <p class="how" data-i18n="how">Tap 🥭 = +1, glowing 🥭 = +3, 🌶️ = lose a life. 3 levels, 20 seconds each.</p>
+      <button id="btnStart" class="primary" data-i18n="start">Start</button>
+      <p class="best"><span data-i18n="best">Best</span>: <b id="bestScore">0</b></p>
+    </div>
+  </section>
+
+  <!-- Level complete -->
+  <section id="levelUp" class="overlay">
+    <div class="card"><h2 data-i18n="levelComplete">Level complete!</h2><p id="levelUpText"></p></div>
+  </section>
+
+  <!-- Pause -->
+  <section id="paused" class="overlay">
+    <div class="card"><h2 data-i18n="paused">Paused</h2>
+      <button id="btnResume" class="primary" data-i18n="resume">Resume</button></div>
+  </section>
+
+  <!-- Game over -->
+  <section id="over" class="overlay">
+    <div class="card">
+      <h2 id="overTitle">Game Over</h2>
+      <p id="overReason"></p>
+      <div class="big" id="finalScore">0</div>
+      <button id="btnShare" class="primary" data-i18n="share">Share score</button>
+      <button id="btnAgain" class="secondary" data-i18n="playAgain">Play again</button>
+      <p class="small"><a href="dashboard.html" data-i18n="seeData">See the analytics →</a></p>
+    </div>
+  </section>
+
+  <div id="toast"></div>
+
+  <!-- The deliberately UNDERUSED feature: tiny, low-contrast, bottom corner -->
+  <footer id="foot">
+    <span class="credit">GDG · Beyond the UI</span>
+    <button id="btnLang" aria-label="Change language" title="Language">EN · த</button>
+  </footer>
+</div>
+<script src="config.js"></script>
+<script src="analytics.js"></script>
+<script src="i18n.js"></script>
+<script src="game.js"></script>
+</body>
+</html>

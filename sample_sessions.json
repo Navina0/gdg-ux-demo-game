@@ -1,0 +1,2283 @@
+{
+ "_note": "SIMULATED sample data for the GDG 'Beyond the UI' demo. Not real users.",
+ "generated_at": 1793211402,
+ "sessions": [
+  {
+   "user": "u01",
+   "distinct_id": "demo_u01_bdd640fb",
+   "events": [
+    {
+     "event": "app_opened",
+     "time": 1793207817,
+     "properties": {
+      "distinct_id": "demo_u01_bdd640fb",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u01",
+      "lang": "en",
+      "referrer": "qr"
+     }
+    },
+    {
+     "event": "sound_toggled",
+     "time": 1793207821,
+     "properties": {
+      "distinct_id": "demo_u01_bdd640fb",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u01",
+      "lang": "en",
+      "sound_on": false,
+      "in_game": false
+     }
+    },
+    {
+     "event": "game_started",
+     "time": 1793207823,
+     "properties": {
+      "distinct_id": "demo_u01_bdd640fb",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u01",
+      "lang": "en",
+      "via": "start_button"
+     }
+    },
+    {
+     "event": "level_started",
+     "time": 1793207823,
+     "properties": {
+      "distinct_id": "demo_u01_bdd640fb",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u01",
+      "lang": "en",
+      "level": 1
+     }
+    },
+    {
+     "event": "level_completed",
+     "time": 1793207843,
+     "properties": {
+      "distinct_id": "demo_u01_bdd640fb",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u01",
+      "lang": "en",
+      "level": 1,
+      "score": 15
+     }
+    },
+    {
+     "event": "level_started",
+     "time": 1793207845,
+     "properties": {
+      "distinct_id": "demo_u01_bdd640fb",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u01",
+      "lang": "en",
+      "level": 2
+     }
+    },
+    {
+     "event": "level_completed",
+     "time": 1793207865,
+     "properties": {
+      "distinct_id": "demo_u01_bdd640fb",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u01",
+      "lang": "en",
+      "level": 2,
+      "score": 39
+     }
+    },
+    {
+     "event": "level_started",
+     "time": 1793207867,
+     "properties": {
+      "distinct_id": "demo_u01_bdd640fb",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u01",
+      "lang": "en",
+      "level": 3
+     }
+    },
+    {
+     "event": "level_completed",
+     "time": 1793207887,
+     "properties": {
+      "distinct_id": "demo_u01_bdd640fb",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u01",
+      "lang": "en",
+      "level": 3,
+      "score": 64
+     }
+    },
+    {
+     "event": "game_over",
+     "time": 1793207889,
+     "properties": {
+      "distinct_id": "demo_u01_bdd640fb",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u01",
+      "lang": "en",
+      "reason": "completed",
+      "score": 64,
+      "level_reached": 3,
+      "levels_completed": 3,
+      "duration_s": 66
+     }
+    },
+    {
+     "event": "share_clicked",
+     "time": 1793207891,
+     "properties": {
+      "distinct_id": "demo_u01_bdd640fb",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u01",
+      "lang": "en",
+      "score": 64,
+      "method": "native"
+     }
+    }
+   ]
+  },
+  {
+   "user": "u02",
+   "distinct_id": "demo_u02_815ef6d1",
+   "events": [
+    {
+     "event": "app_opened",
+     "time": 1793208023,
+     "properties": {
+      "distinct_id": "demo_u02_815ef6d1",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u02",
+      "lang": "en",
+      "referrer": "qr"
+     }
+    },
+    {
+     "event": "sound_toggled",
+     "time": 1793208030,
+     "properties": {
+      "distinct_id": "demo_u02_815ef6d1",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u02",
+      "lang": "en",
+      "sound_on": false,
+      "in_game": false
+     }
+    },
+    {
+     "event": "game_started",
+     "time": 1793208032,
+     "properties": {
+      "distinct_id": "demo_u02_815ef6d1",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u02",
+      "lang": "en",
+      "via": "start_button"
+     }
+    },
+    {
+     "event": "level_started",
+     "time": 1793208032,
+     "properties": {
+      "distinct_id": "demo_u02_815ef6d1",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u02",
+      "lang": "en",
+      "level": 1
+     }
+    },
+    {
+     "event": "pause_clicked",
+     "time": 1793208037,
+     "properties": {
+      "distinct_id": "demo_u02_815ef6d1",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u02",
+      "lang": "en",
+      "level": 1,
+      "time_left": 15
+     }
+    },
+    {
+     "event": "resume_clicked",
+     "time": 1793208046,
+     "properties": {
+      "distinct_id": "demo_u02_815ef6d1",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u02",
+      "lang": "en",
+      "level": 1
+     }
+    },
+    {
+     "event": "level_completed",
+     "time": 1793208069,
+     "properties": {
+      "distinct_id": "demo_u02_815ef6d1",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u02",
+      "lang": "en",
+      "level": 1,
+      "score": 16
+     }
+    },
+    {
+     "event": "level_started",
+     "time": 1793208071,
+     "properties": {
+      "distinct_id": "demo_u02_815ef6d1",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u02",
+      "lang": "en",
+      "level": 2
+     }
+    },
+    {
+     "event": "level_completed",
+     "time": 1793208091,
+     "properties": {
+      "distinct_id": "demo_u02_815ef6d1",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u02",
+      "lang": "en",
+      "level": 2,
+      "score": 36
+     }
+    },
+    {
+     "event": "level_started",
+     "time": 1793208093,
+     "properties": {
+      "distinct_id": "demo_u02_815ef6d1",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u02",
+      "lang": "en",
+      "level": 3
+     }
+    },
+    {
+     "event": "level_completed",
+     "time": 1793208116,
+     "properties": {
+      "distinct_id": "demo_u02_815ef6d1",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u02",
+      "lang": "en",
+      "level": 3,
+      "score": 57
+     }
+    },
+    {
+     "event": "game_over",
+     "time": 1793208118,
+     "properties": {
+      "distinct_id": "demo_u02_815ef6d1",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u02",
+      "lang": "en",
+      "reason": "completed",
+      "score": 57,
+      "level_reached": 3,
+      "levels_completed": 3,
+      "duration_s": 86
+     }
+    },
+    {
+     "event": "share_clicked",
+     "time": 1793208122,
+     "properties": {
+      "distinct_id": "demo_u02_815ef6d1",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u02",
+      "lang": "en",
+      "score": 57,
+      "method": "native"
+     }
+    }
+   ]
+  },
+  {
+   "user": "u03",
+   "distinct_id": "demo_u03_f50bea63",
+   "events": [
+    {
+     "event": "app_opened",
+     "time": 1793208248,
+     "properties": {
+      "distinct_id": "demo_u03_f50bea63",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u03",
+      "lang": "en",
+      "referrer": "qr"
+     }
+    },
+    {
+     "event": "game_started",
+     "time": 1793208251,
+     "properties": {
+      "distinct_id": "demo_u03_f50bea63",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u03",
+      "lang": "en",
+      "via": "start_button"
+     }
+    },
+    {
+     "event": "level_started",
+     "time": 1793208251,
+     "properties": {
+      "distinct_id": "demo_u03_f50bea63",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u03",
+      "lang": "en",
+      "level": 1
+     }
+    },
+    {
+     "event": "hint_clicked",
+     "time": 1793208258,
+     "properties": {
+      "distinct_id": "demo_u03_f50bea63",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u03",
+      "lang": "en",
+      "level": 1,
+      "in_game": true
+     }
+    },
+    {
+     "event": "level_completed",
+     "time": 1793208280,
+     "properties": {
+      "distinct_id": "demo_u03_f50bea63",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u03",
+      "lang": "en",
+      "level": 1,
+      "score": 14
+     }
+    },
+    {
+     "event": "level_started",
+     "time": 1793208282,
+     "properties": {
+      "distinct_id": "demo_u03_f50bea63",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u03",
+      "lang": "en",
+      "level": 2
+     }
+    },
+    {
+     "event": "level_completed",
+     "time": 1793208304,
+     "properties": {
+      "distinct_id": "demo_u03_f50bea63",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u03",
+      "lang": "en",
+      "level": 2,
+      "score": 35
+     }
+    },
+    {
+     "event": "level_started",
+     "time": 1793208306,
+     "properties": {
+      "distinct_id": "demo_u03_f50bea63",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u03",
+      "lang": "en",
+      "level": 3
+     }
+    },
+    {
+     "event": "level_completed",
+     "time": 1793208329,
+     "properties": {
+      "distinct_id": "demo_u03_f50bea63",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u03",
+      "lang": "en",
+      "level": 3,
+      "score": 54
+     }
+    },
+    {
+     "event": "game_over",
+     "time": 1793208331,
+     "properties": {
+      "distinct_id": "demo_u03_f50bea63",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u03",
+      "lang": "en",
+      "reason": "completed",
+      "score": 54,
+      "level_reached": 3,
+      "levels_completed": 3,
+      "duration_s": 80
+     }
+    },
+    {
+     "event": "share_clicked",
+     "time": 1793208337,
+     "properties": {
+      "distinct_id": "demo_u03_f50bea63",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u03",
+      "lang": "en",
+      "score": 54,
+      "method": "native"
+     }
+    },
+    {
+     "event": "restart_clicked",
+     "time": 1793208339,
+     "properties": {
+      "distinct_id": "demo_u03_f50bea63",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u03",
+      "lang": "en",
+      "from": "game_over",
+      "prev_score": 54
+     }
+    }
+   ]
+  },
+  {
+   "user": "u04",
+   "distinct_id": "demo_u04_142c3fe8",
+   "events": [
+    {
+     "event": "app_opened",
+     "time": 1793208480,
+     "properties": {
+      "distinct_id": "demo_u04_142c3fe8",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u04",
+      "lang": "en",
+      "referrer": "qr"
+     }
+    },
+    {
+     "event": "language_switch_clicked",
+     "time": 1793208484,
+     "properties": {
+      "distinct_id": "demo_u04_142c3fe8",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u04",
+      "lang": "en",
+      "from": "en",
+      "to": "ta",
+      "screen": "start"
+     }
+    },
+    {
+     "event": "sound_toggled",
+     "time": 1793208491,
+     "properties": {
+      "distinct_id": "demo_u04_142c3fe8",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u04",
+      "lang": "ta",
+      "sound_on": false,
+      "in_game": false
+     }
+    },
+    {
+     "event": "game_started",
+     "time": 1793208493,
+     "properties": {
+      "distinct_id": "demo_u04_142c3fe8",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u04",
+      "lang": "ta",
+      "via": "start_button"
+     }
+    },
+    {
+     "event": "level_started",
+     "time": 1793208493,
+     "properties": {
+      "distinct_id": "demo_u04_142c3fe8",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u04",
+      "lang": "ta",
+      "level": 1
+     }
+    },
+    {
+     "event": "level_completed",
+     "time": 1793208513,
+     "properties": {
+      "distinct_id": "demo_u04_142c3fe8",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u04",
+      "lang": "ta",
+      "level": 1,
+      "score": 16
+     }
+    },
+    {
+     "event": "level_started",
+     "time": 1793208515,
+     "properties": {
+      "distinct_id": "demo_u04_142c3fe8",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u04",
+      "lang": "ta",
+      "level": 2
+     }
+    },
+    {
+     "event": "level_completed",
+     "time": 1793208536,
+     "properties": {
+      "distinct_id": "demo_u04_142c3fe8",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u04",
+      "lang": "ta",
+      "level": 2,
+      "score": 32
+     }
+    },
+    {
+     "event": "level_started",
+     "time": 1793208538,
+     "properties": {
+      "distinct_id": "demo_u04_142c3fe8",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u04",
+      "lang": "ta",
+      "level": 3
+     }
+    },
+    {
+     "event": "level_completed",
+     "time": 1793208558,
+     "properties": {
+      "distinct_id": "demo_u04_142c3fe8",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u04",
+      "lang": "ta",
+      "level": 3,
+      "score": 55
+     }
+    },
+    {
+     "event": "game_over",
+     "time": 1793208560,
+     "properties": {
+      "distinct_id": "demo_u04_142c3fe8",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u04",
+      "lang": "ta",
+      "reason": "completed",
+      "score": 55,
+      "level_reached": 3,
+      "levels_completed": 3,
+      "duration_s": 67
+     }
+    },
+    {
+     "event": "share_clicked",
+     "time": 1793208563,
+     "properties": {
+      "distinct_id": "demo_u04_142c3fe8",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u04",
+      "lang": "ta",
+      "score": 55,
+      "method": "native"
+     }
+    },
+    {
+     "event": "restart_clicked",
+     "time": 1793208565,
+     "properties": {
+      "distinct_id": "demo_u04_142c3fe8",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u04",
+      "lang": "ta",
+      "from": "game_over",
+      "prev_score": 55
+     }
+    }
+   ]
+  },
+  {
+   "user": "u05",
+   "distinct_id": "demo_u05_a2bc372f",
+   "events": [
+    {
+     "event": "app_opened",
+     "time": 1793208692,
+     "properties": {
+      "distinct_id": "demo_u05_a2bc372f",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u05",
+      "lang": "en",
+      "referrer": "qr"
+     }
+    },
+    {
+     "event": "sound_toggled",
+     "time": 1793208697,
+     "properties": {
+      "distinct_id": "demo_u05_a2bc372f",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u05",
+      "lang": "en",
+      "sound_on": false,
+      "in_game": false
+     }
+    },
+    {
+     "event": "game_started",
+     "time": 1793208699,
+     "properties": {
+      "distinct_id": "demo_u05_a2bc372f",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u05",
+      "lang": "en",
+      "via": "start_button"
+     }
+    },
+    {
+     "event": "level_started",
+     "time": 1793208699,
+     "properties": {
+      "distinct_id": "demo_u05_a2bc372f",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u05",
+      "lang": "en",
+      "level": 1
+     }
+    },
+    {
+     "event": "pause_clicked",
+     "time": 1793208705,
+     "properties": {
+      "distinct_id": "demo_u05_a2bc372f",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u05",
+      "lang": "en",
+      "level": 1,
+      "time_left": 8
+     }
+    },
+    {
+     "event": "resume_clicked",
+     "time": 1793208712,
+     "properties": {
+      "distinct_id": "demo_u05_a2bc372f",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u05",
+      "lang": "en",
+      "level": 1
+     }
+    },
+    {
+     "event": "level_completed",
+     "time": 1793208733,
+     "properties": {
+      "distinct_id": "demo_u05_a2bc372f",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u05",
+      "lang": "en",
+      "level": 1,
+      "score": 14
+     }
+    },
+    {
+     "event": "level_started",
+     "time": 1793208735,
+     "properties": {
+      "distinct_id": "demo_u05_a2bc372f",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u05",
+      "lang": "en",
+      "level": 2
+     }
+    },
+    {
+     "event": "level_completed",
+     "time": 1793208756,
+     "properties": {
+      "distinct_id": "demo_u05_a2bc372f",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u05",
+      "lang": "en",
+      "level": 2,
+      "score": 38
+     }
+    },
+    {
+     "event": "level_started",
+     "time": 1793208758,
+     "properties": {
+      "distinct_id": "demo_u05_a2bc372f",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u05",
+      "lang": "en",
+      "level": 3
+     }
+    },
+    {
+     "event": "level_completed",
+     "time": 1793208781,
+     "properties": {
+      "distinct_id": "demo_u05_a2bc372f",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u05",
+      "lang": "en",
+      "level": 3,
+      "score": 59
+     }
+    },
+    {
+     "event": "game_over",
+     "time": 1793208783,
+     "properties": {
+      "distinct_id": "demo_u05_a2bc372f",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u05",
+      "lang": "en",
+      "reason": "completed",
+      "score": 59,
+      "level_reached": 3,
+      "levels_completed": 3,
+      "duration_s": 84
+     }
+    },
+    {
+     "event": "share_clicked",
+     "time": 1793208788,
+     "properties": {
+      "distinct_id": "demo_u05_a2bc372f",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u05",
+      "lang": "en",
+      "score": 59,
+      "method": "native"
+     }
+    }
+   ]
+  },
+  {
+   "user": "u06",
+   "distinct_id": "demo_u06_a3d70628",
+   "events": [
+    {
+     "event": "app_opened",
+     "time": 1793208916,
+     "properties": {
+      "distinct_id": "demo_u06_a3d70628",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u06",
+      "lang": "en",
+      "referrer": "qr"
+     }
+    },
+    {
+     "event": "sound_toggled",
+     "time": 1793208924,
+     "properties": {
+      "distinct_id": "demo_u06_a3d70628",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u06",
+      "lang": "en",
+      "sound_on": false,
+      "in_game": false
+     }
+    },
+    {
+     "event": "game_started",
+     "time": 1793208926,
+     "properties": {
+      "distinct_id": "demo_u06_a3d70628",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u06",
+      "lang": "en",
+      "via": "start_button"
+     }
+    },
+    {
+     "event": "level_started",
+     "time": 1793208926,
+     "properties": {
+      "distinct_id": "demo_u06_a3d70628",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u06",
+      "lang": "en",
+      "level": 1
+     }
+    },
+    {
+     "event": "level_completed",
+     "time": 1793208946,
+     "properties": {
+      "distinct_id": "demo_u06_a3d70628",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u06",
+      "lang": "en",
+      "level": 1,
+      "score": 18
+     }
+    },
+    {
+     "event": "level_started",
+     "time": 1793208948,
+     "properties": {
+      "distinct_id": "demo_u06_a3d70628",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u06",
+      "lang": "en",
+      "level": 2
+     }
+    },
+    {
+     "event": "level_completed",
+     "time": 1793208968,
+     "properties": {
+      "distinct_id": "demo_u06_a3d70628",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u06",
+      "lang": "en",
+      "level": 2,
+      "score": 37
+     }
+    },
+    {
+     "event": "level_started",
+     "time": 1793208970,
+     "properties": {
+      "distinct_id": "demo_u06_a3d70628",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u06",
+      "lang": "en",
+      "level": 3
+     }
+    },
+    {
+     "event": "game_over",
+     "time": 1793208982,
+     "properties": {
+      "distinct_id": "demo_u06_a3d70628",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u06",
+      "lang": "en",
+      "reason": "out_of_lives",
+      "score": 61,
+      "level_reached": 3,
+      "levels_completed": 2,
+      "duration_s": 56
+     }
+    },
+    {
+     "event": "restart_clicked",
+     "time": 1793208986,
+     "properties": {
+      "distinct_id": "demo_u06_a3d70628",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u06",
+      "lang": "en",
+      "from": "game_over",
+      "prev_score": 61
+     }
+    }
+   ]
+  },
+  {
+   "user": "u07",
+   "distinct_id": "demo_u07_f16287e4",
+   "events": [
+    {
+     "event": "app_opened",
+     "time": 1793209178,
+     "properties": {
+      "distinct_id": "demo_u07_f16287e4",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u07",
+      "lang": "en",
+      "referrer": "qr"
+     }
+    },
+    {
+     "event": "game_started",
+     "time": 1793209186,
+     "properties": {
+      "distinct_id": "demo_u07_f16287e4",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u07",
+      "lang": "en",
+      "via": "start_button"
+     }
+    },
+    {
+     "event": "level_started",
+     "time": 1793209186,
+     "properties": {
+      "distinct_id": "demo_u07_f16287e4",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u07",
+      "lang": "en",
+      "level": 1
+     }
+    },
+    {
+     "event": "pause_clicked",
+     "time": 1793209192,
+     "properties": {
+      "distinct_id": "demo_u07_f16287e4",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u07",
+      "lang": "en",
+      "level": 1,
+      "time_left": 8
+     }
+    },
+    {
+     "event": "resume_clicked",
+     "time": 1793209202,
+     "properties": {
+      "distinct_id": "demo_u07_f16287e4",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u07",
+      "lang": "en",
+      "level": 1
+     }
+    },
+    {
+     "event": "hint_clicked",
+     "time": 1793209209,
+     "properties": {
+      "distinct_id": "demo_u07_f16287e4",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u07",
+      "lang": "en",
+      "level": 1,
+      "in_game": true
+     }
+    },
+    {
+     "event": "level_completed",
+     "time": 1793209230,
+     "properties": {
+      "distinct_id": "demo_u07_f16287e4",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u07",
+      "lang": "en",
+      "level": 1,
+      "score": 20
+     }
+    },
+    {
+     "event": "level_started",
+     "time": 1793209232,
+     "properties": {
+      "distinct_id": "demo_u07_f16287e4",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u07",
+      "lang": "en",
+      "level": 2
+     }
+    },
+    {
+     "event": "level_completed",
+     "time": 1793209253,
+     "properties": {
+      "distinct_id": "demo_u07_f16287e4",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u07",
+      "lang": "en",
+      "level": 2,
+      "score": 40
+     }
+    },
+    {
+     "event": "level_started",
+     "time": 1793209255,
+     "properties": {
+      "distinct_id": "demo_u07_f16287e4",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u07",
+      "lang": "en",
+      "level": 3
+     }
+    },
+    {
+     "event": "game_over",
+     "time": 1793209269,
+     "properties": {
+      "distinct_id": "demo_u07_f16287e4",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u07",
+      "lang": "en",
+      "reason": "out_of_lives",
+      "score": 62,
+      "level_reached": 3,
+      "levels_completed": 2,
+      "duration_s": 83
+     }
+    }
+   ]
+  },
+  {
+   "user": "u08",
+   "distinct_id": "demo_u08_95a76d79",
+   "events": [
+    {
+     "event": "app_opened",
+     "time": 1793209399,
+     "properties": {
+      "distinct_id": "demo_u08_95a76d79",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u08",
+      "lang": "en",
+      "referrer": "qr"
+     }
+    },
+    {
+     "event": "sound_toggled",
+     "time": 1793209406,
+     "properties": {
+      "distinct_id": "demo_u08_95a76d79",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u08",
+      "lang": "en",
+      "sound_on": false,
+      "in_game": false
+     }
+    },
+    {
+     "event": "game_started",
+     "time": 1793209408,
+     "properties": {
+      "distinct_id": "demo_u08_95a76d79",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u08",
+      "lang": "en",
+      "via": "start_button"
+     }
+    },
+    {
+     "event": "level_started",
+     "time": 1793209408,
+     "properties": {
+      "distinct_id": "demo_u08_95a76d79",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u08",
+      "lang": "en",
+      "level": 1
+     }
+    },
+    {
+     "event": "level_completed",
+     "time": 1793209430,
+     "properties": {
+      "distinct_id": "demo_u08_95a76d79",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u08",
+      "lang": "en",
+      "level": 1,
+      "score": 19
+     }
+    },
+    {
+     "event": "level_started",
+     "time": 1793209432,
+     "properties": {
+      "distinct_id": "demo_u08_95a76d79",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u08",
+      "lang": "en",
+      "level": 2
+     }
+    },
+    {
+     "event": "level_completed",
+     "time": 1793209453,
+     "properties": {
+      "distinct_id": "demo_u08_95a76d79",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u08",
+      "lang": "en",
+      "level": 2,
+      "score": 38
+     }
+    },
+    {
+     "event": "level_started",
+     "time": 1793209455,
+     "properties": {
+      "distinct_id": "demo_u08_95a76d79",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u08",
+      "lang": "en",
+      "level": 3
+     }
+    },
+    {
+     "event": "game_over",
+     "time": 1793209468,
+     "properties": {
+      "distinct_id": "demo_u08_95a76d79",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u08",
+      "lang": "en",
+      "reason": "out_of_lives",
+      "score": 65,
+      "level_reached": 3,
+      "levels_completed": 2,
+      "duration_s": 60
+     }
+    }
+   ]
+  },
+  {
+   "user": "u09",
+   "distinct_id": "demo_u09_dc713d96",
+   "events": [
+    {
+     "event": "app_opened",
+     "time": 1793209571,
+     "properties": {
+      "distinct_id": "demo_u09_dc713d96",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u09",
+      "lang": "en",
+      "referrer": "qr"
+     }
+    },
+    {
+     "event": "language_switch_clicked",
+     "time": 1793209574,
+     "properties": {
+      "distinct_id": "demo_u09_dc713d96",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u09",
+      "lang": "en",
+      "from": "en",
+      "to": "ta",
+      "screen": "start"
+     }
+    },
+    {
+     "event": "sound_toggled",
+     "time": 1793209582,
+     "properties": {
+      "distinct_id": "demo_u09_dc713d96",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u09",
+      "lang": "ta",
+      "sound_on": false,
+      "in_game": false
+     }
+    },
+    {
+     "event": "game_started",
+     "time": 1793209584,
+     "properties": {
+      "distinct_id": "demo_u09_dc713d96",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u09",
+      "lang": "ta",
+      "via": "start_button"
+     }
+    },
+    {
+     "event": "level_started",
+     "time": 1793209584,
+     "properties": {
+      "distinct_id": "demo_u09_dc713d96",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u09",
+      "lang": "ta",
+      "level": 1
+     }
+    },
+    {
+     "event": "level_completed",
+     "time": 1793209604,
+     "properties": {
+      "distinct_id": "demo_u09_dc713d96",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u09",
+      "lang": "ta",
+      "level": 1,
+      "score": 19
+     }
+    },
+    {
+     "event": "level_started",
+     "time": 1793209606,
+     "properties": {
+      "distinct_id": "demo_u09_dc713d96",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u09",
+      "lang": "ta",
+      "level": 2
+     }
+    },
+    {
+     "event": "game_over",
+     "time": 1793209618,
+     "properties": {
+      "distinct_id": "demo_u09_dc713d96",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u09",
+      "lang": "ta",
+      "reason": "out_of_lives",
+      "score": 41,
+      "level_reached": 2,
+      "levels_completed": 1,
+      "duration_s": 34
+     }
+    },
+    {
+     "event": "restart_clicked",
+     "time": 1793209624,
+     "properties": {
+      "distinct_id": "demo_u09_dc713d96",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u09",
+      "lang": "ta",
+      "from": "game_over",
+      "prev_score": 41
+     }
+    }
+   ]
+  },
+  {
+   "user": "u10",
+   "distinct_id": "demo_u10_405cacec",
+   "events": [
+    {
+     "event": "app_opened",
+     "time": 1793209837,
+     "properties": {
+      "distinct_id": "demo_u10_405cacec",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u10",
+      "lang": "en",
+      "referrer": "qr"
+     }
+    },
+    {
+     "event": "game_started",
+     "time": 1793209840,
+     "properties": {
+      "distinct_id": "demo_u10_405cacec",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u10",
+      "lang": "en",
+      "via": "start_button"
+     }
+    },
+    {
+     "event": "level_started",
+     "time": 1793209840,
+     "properties": {
+      "distinct_id": "demo_u10_405cacec",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u10",
+      "lang": "en",
+      "level": 1
+     }
+    },
+    {
+     "event": "pause_clicked",
+     "time": 1793209849,
+     "properties": {
+      "distinct_id": "demo_u10_405cacec",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u10",
+      "lang": "en",
+      "level": 1,
+      "time_left": 6
+     }
+    },
+    {
+     "event": "resume_clicked",
+     "time": 1793209856,
+     "properties": {
+      "distinct_id": "demo_u10_405cacec",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u10",
+      "lang": "en",
+      "level": 1
+     }
+    },
+    {
+     "event": "hint_clicked",
+     "time": 1793209865,
+     "properties": {
+      "distinct_id": "demo_u10_405cacec",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u10",
+      "lang": "en",
+      "level": 1,
+      "in_game": true
+     }
+    },
+    {
+     "event": "level_completed",
+     "time": 1793209885,
+     "properties": {
+      "distinct_id": "demo_u10_405cacec",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u10",
+      "lang": "en",
+      "level": 1,
+      "score": 18
+     }
+    },
+    {
+     "event": "level_started",
+     "time": 1793209887,
+     "properties": {
+      "distinct_id": "demo_u10_405cacec",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u10",
+      "lang": "en",
+      "level": 2
+     }
+    },
+    {
+     "event": "game_over",
+     "time": 1793209899,
+     "properties": {
+      "distinct_id": "demo_u10_405cacec",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u10",
+      "lang": "en",
+      "reason": "out_of_lives",
+      "score": 38,
+      "level_reached": 2,
+      "levels_completed": 1,
+      "duration_s": 59
+     }
+    }
+   ]
+  },
+  {
+   "user": "u11",
+   "distinct_id": "demo_u11_f42d47cc",
+   "events": [
+    {
+     "event": "app_opened",
+     "time": 1793210034,
+     "properties": {
+      "distinct_id": "demo_u11_f42d47cc",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u11",
+      "lang": "en",
+      "referrer": "qr"
+     }
+    },
+    {
+     "event": "sound_toggled",
+     "time": 1793210038,
+     "properties": {
+      "distinct_id": "demo_u11_f42d47cc",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u11",
+      "lang": "en",
+      "sound_on": false,
+      "in_game": false
+     }
+    },
+    {
+     "event": "game_started",
+     "time": 1793210040,
+     "properties": {
+      "distinct_id": "demo_u11_f42d47cc",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u11",
+      "lang": "en",
+      "via": "start_button"
+     }
+    },
+    {
+     "event": "level_started",
+     "time": 1793210040,
+     "properties": {
+      "distinct_id": "demo_u11_f42d47cc",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u11",
+      "lang": "en",
+      "level": 1
+     }
+    },
+    {
+     "event": "level_completed",
+     "time": 1793210060,
+     "properties": {
+      "distinct_id": "demo_u11_f42d47cc",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u11",
+      "lang": "en",
+      "level": 1,
+      "score": 21
+     }
+    },
+    {
+     "event": "level_started",
+     "time": 1793210062,
+     "properties": {
+      "distinct_id": "demo_u11_f42d47cc",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u11",
+      "lang": "en",
+      "level": 2
+     }
+    },
+    {
+     "event": "game_over",
+     "time": 1793210078,
+     "properties": {
+      "distinct_id": "demo_u11_f42d47cc",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u11",
+      "lang": "en",
+      "reason": "out_of_lives",
+      "score": 41,
+      "level_reached": 2,
+      "levels_completed": 1,
+      "duration_s": 38
+     }
+    },
+    {
+     "event": "restart_clicked",
+     "time": 1793210084,
+     "properties": {
+      "distinct_id": "demo_u11_f42d47cc",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u11",
+      "lang": "en",
+      "from": "game_over",
+      "prev_score": 41
+     }
+    }
+   ]
+  },
+  {
+   "user": "u12",
+   "distinct_id": "demo_u12_5fb8d16c",
+   "events": [
+    {
+     "event": "app_opened",
+     "time": 1793210256,
+     "properties": {
+      "distinct_id": "demo_u12_5fb8d16c",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u12",
+      "lang": "en",
+      "referrer": "qr"
+     }
+    },
+    {
+     "event": "game_started",
+     "time": 1793210263,
+     "properties": {
+      "distinct_id": "demo_u12_5fb8d16c",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u12",
+      "lang": "en",
+      "via": "start_button"
+     }
+    },
+    {
+     "event": "level_started",
+     "time": 1793210263,
+     "properties": {
+      "distinct_id": "demo_u12_5fb8d16c",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u12",
+      "lang": "en",
+      "level": 1
+     }
+    },
+    {
+     "event": "level_completed",
+     "time": 1793210285,
+     "properties": {
+      "distinct_id": "demo_u12_5fb8d16c",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u12",
+      "lang": "en",
+      "level": 1,
+      "score": 13
+     }
+    },
+    {
+     "event": "level_started",
+     "time": 1793210287,
+     "properties": {
+      "distinct_id": "demo_u12_5fb8d16c",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u12",
+      "lang": "en",
+      "level": 2
+     }
+    },
+    {
+     "event": "game_over",
+     "time": 1793210293,
+     "properties": {
+      "distinct_id": "demo_u12_5fb8d16c",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u12",
+      "lang": "en",
+      "reason": "out_of_lives",
+      "score": 36,
+      "level_reached": 2,
+      "levels_completed": 1,
+      "duration_s": 30
+     }
+    }
+   ]
+  },
+  {
+   "user": "u13",
+   "distinct_id": "demo_u13_e0f3eab0",
+   "events": [
+    {
+     "event": "app_opened",
+     "time": 1793210457,
+     "properties": {
+      "distinct_id": "demo_u13_e0f3eab0",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u13",
+      "lang": "en",
+      "referrer": "qr"
+     }
+    },
+    {
+     "event": "game_started",
+     "time": 1793210460,
+     "properties": {
+      "distinct_id": "demo_u13_e0f3eab0",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u13",
+      "lang": "en",
+      "via": "start_button"
+     }
+    },
+    {
+     "event": "level_started",
+     "time": 1793210460,
+     "properties": {
+      "distinct_id": "demo_u13_e0f3eab0",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u13",
+      "lang": "en",
+      "level": 1
+     }
+    },
+    {
+     "event": "hint_clicked",
+     "time": 1793210465,
+     "properties": {
+      "distinct_id": "demo_u13_e0f3eab0",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u13",
+      "lang": "en",
+      "level": 1,
+      "in_game": true
+     }
+    },
+    {
+     "event": "game_over",
+     "time": 1793210472,
+     "properties": {
+      "distinct_id": "demo_u13_e0f3eab0",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u13",
+      "lang": "en",
+      "reason": "out_of_lives",
+      "score": 14,
+      "level_reached": 1,
+      "levels_completed": 0,
+      "duration_s": 12
+     }
+    },
+    {
+     "event": "restart_clicked",
+     "time": 1793210477,
+     "properties": {
+      "distinct_id": "demo_u13_e0f3eab0",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u13",
+      "lang": "en",
+      "from": "game_over",
+      "prev_score": 14
+     }
+    }
+   ]
+  },
+  {
+   "user": "u14",
+   "distinct_id": "demo_u14_c2b6d2c5",
+   "events": [
+    {
+     "event": "app_opened",
+     "time": 1793210711,
+     "properties": {
+      "distinct_id": "demo_u14_c2b6d2c5",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u14",
+      "lang": "en",
+      "referrer": "qr"
+     }
+    },
+    {
+     "event": "sound_toggled",
+     "time": 1793210715,
+     "properties": {
+      "distinct_id": "demo_u14_c2b6d2c5",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u14",
+      "lang": "en",
+      "sound_on": false,
+      "in_game": false
+     }
+    },
+    {
+     "event": "game_started",
+     "time": 1793210717,
+     "properties": {
+      "distinct_id": "demo_u14_c2b6d2c5",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u14",
+      "lang": "en",
+      "via": "start_button"
+     }
+    },
+    {
+     "event": "level_started",
+     "time": 1793210717,
+     "properties": {
+      "distinct_id": "demo_u14_c2b6d2c5",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u14",
+      "lang": "en",
+      "level": 1
+     }
+    },
+    {
+     "event": "game_over",
+     "time": 1793210733,
+     "properties": {
+      "distinct_id": "demo_u14_c2b6d2c5",
+      "$os": "iOS",
+      "$browser": "Mobile Safari",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u14",
+      "lang": "en",
+      "reason": "out_of_lives",
+      "score": 15,
+      "level_reached": 1,
+      "levels_completed": 0,
+      "duration_s": 16
+     }
+    }
+   ]
+  },
+  {
+   "user": "u15",
+   "distinct_id": "demo_u15_2a45c2ab",
+   "events": [
+    {
+     "event": "app_opened",
+     "time": 1793210915,
+     "properties": {
+      "distinct_id": "demo_u15_2a45c2ab",
+      "$os": "Android",
+      "$browser": "Chrome",
+      "utm_source": "qr",
+      "game": "mango_catch",
+      "simulated": true,
+      "demo_session_id": "sim_u15",
+      "lang": "en",
+      "referrer": "qr"
+     }
+    }
+   ]
+  }
+ ],
+ "summary": {
+  "sessions": 15,
+  "feature_sessions": {
+   "game_started": 14,
+   "sound_toggled": 9,
+   "restart_clicked": 6,
+   "share_clicked": 5,
+   "pause_clicked": 4,
+   "hint_clicked": 4,
+   "language_switch_clicked": 2
+  },
+  "funnel": [
+   [
+    "app_opened",
+    15
+   ],
+   [
+    "game_started",
+    14
+   ],
+   [
+    "level_1_completed",
+    12
+   ],
+   [
+    "level_2_completed",
+    8
+   ],
+   [
+    "level_3_completed",
+    5
+   ]
+  ]
+ }
+}
