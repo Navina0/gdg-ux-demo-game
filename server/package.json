@@ -1,0 +1,10 @@
+{
+  "name": "mango-catch-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Server-validated leaderboard API for the Mango Catch GDG demo game",
+  "main": "index.js",
+  "engines": { "node": ">=18" },
+  "scripts": { "start": "node index.js" },
+  "dependencies": { "express": "^4.21.2", "redis": "^4.7.0" }
+}
