@@ -1,8 +1,9 @@
 rules_version = '2';
 // Mango Catch leaderboard — Cloud Firestore security rules.
 // Public read; create-only writes with strict validation; no updates or deletes from clients.
-// Bounds come from the game constants (3 levels × 60 s, spawn rate, gold mango = +3) — the same
-// plausible-max formula as server/index.js: level 1 ≤ 141, level 2 ≤ 167, level 3 ≤ 210, total ≤ 518.
+// Bounds come from the game constants (2 levels × 60 s, spawn rate, gold mango = +3; level 2 uses the old
+// level-3 speed) — the same plausible-max formula as server/index.js: level 1 ≤ 141, level 2 ≤ 210, total ≤ 351.
+// level_scores keeps 3 slots for compatibility; slot 3 is always 0 now.
 // NOTE: client writes are rule-validated, NOT cheat-proof. Someone can still write a plausible fake
 // score with their own script. Optional hardening: Firebase App Check (reCAPTCHA Enterprise) + enforce.
 service cloud.firestore {
@@ -11,8 +12,8 @@ service cloud.firestore {
     function validLevelScores(d) {
       return d.level_scores is list && d.level_scores.size() == 3
         && d.level_scores[0] is int && d.level_scores[0] >= 0 && d.level_scores[0] <= 141
-        && d.level_scores[1] is int && d.level_scores[1] >= 0 && d.level_scores[1] <= 167
-        && d.level_scores[2] is int && d.level_scores[2] >= 0 && d.level_scores[2] <= 210
+        && d.level_scores[1] is int && d.level_scores[1] >= 0 && d.level_scores[1] <= 210
+        && d.level_scores[2] is int && d.level_scores[2] >= 0 && d.level_scores[2] == 0
         && d.level_scores[0] + d.level_scores[1] + d.level_scores[2] == d.score
         // levels not reached yet must be 0 (level = levels completed; index `level` is the partial one)
         && (d.level >= 1 || d.level_scores[1] == 0)
@@ -36,8 +37,8 @@ service cloud.firestore {
         && d.started_at is timestamp
         && d.started_at <= request.time
         && d.started_at > request.time - duration.value(2, 'h')
-        && d.level is int && d.level >= 0 && d.level <= 3
-        && d.score is int && d.score >= 0 && d.score <= 518
+        && d.level is int && d.level >= 0 && d.level <= 2
+        && d.score is int && d.score >= 0 && d.score <= 351
         && d.hints_used is int && d.hints_used >= 0 && d.hints_used <= 500
         && validLevelScores(d)
         // cannot finish N levels faster than N × 60 s (8 s tolerance; started_at is client-supplied)

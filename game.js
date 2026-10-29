@@ -47,6 +47,11 @@
   }
 
   function show(id, on) { $(id).classList.toggle("show", !!on); }
+  function showRules() {   // Hint → points/rules panel (tap anywhere on it or ✕ to close; auto-closes after 6 s)
+    var el = $("rules"); el.hidden = false; clearTimeout(showRules._t);
+    showRules._t = setTimeout(function () { el.hidden = true; }, 6000);
+  }
+  $("rules").onclick = function () { clearTimeout(showRules._t); $("rules").hidden = true; };
   function toast(msg, ms) { var el = $("toast"); el.textContent = msg; el.style.display = "block"; clearTimeout(toast._t); toast._t = setTimeout(function(){ el.style.display = "none"; }, ms || 2000); }
   function hud() {
     $("score").textContent = st.score; $("level").textContent = st.level;
@@ -55,13 +60,18 @@
   }
   function clearItems() { st.items.forEach(function (it) { it.el.remove(); }); st.items = []; }
 
+  // Difficulty step per level: level 1 = 1 (unchanged); level 2 uses the old level-3 speed/spawn rate (step 3).
+  // Keep in sync with server/index.js G.step.
+  function step(l) { return l >= 2 ? 3 : l; }
   function spawn() {
-    var r = Math.random(), kind = r < 0.12 ? "gold" : (r < 0.12 + 0.18 + st.level * 0.05 ? "chilli" : "mango");
+    var d = step(st.level), r = Math.random(), neg = 0.18 + d * 0.05;   // share of negative items (old formula)
+    var apple = st.level >= 2 ? 0.15 : 0;                                // level 2: apples take part of the negative share
+    var kind = r < 0.12 ? "gold" : r < 0.12 + apple ? "apple" : r < 0.12 + neg ? "chilli" : "mango";
     var el = document.createElement("div");
     el.className = "item" + (kind === "gold" ? " gold" : "");
-    el.textContent = kind === "chilli" ? "🌶️" : "🥭";
+    el.textContent = kind === "chilli" ? "🌶️" : kind === "apple" ? "🍎" : "🥭";
     var w = field.clientWidth, x = Math.random() * (w - 64);
-    var it = { el: el, kind: kind, x: x, y: -60, v: 120 + st.level * 55 + Math.random() * 60 };
+    var it = { el: el, kind: kind, x: x, y: -60, v: 120 + d * 55 + Math.random() * 60 };
     el.style.transform = "translate(" + x + "px,-60px)";
     el.addEventListener("pointerdown", function (e) { e.preventDefault(); hit(it); });
     field.appendChild(el); st.items.push(it);
@@ -76,6 +86,9 @@
   function hit(it) {
     if (!st.running || st.paused) return;
     if (it.kind === "chilli") { st.lives--; beep(160, 0.25); popText(it, "−❤️", "#ff5252"); if (navigator.vibrate) navigator.vibrate(60); }
+    else if (it.kind === "apple") {   // −2 points, no life lost; never below the score banked at the start of this level (level score ≥ 0)
+      st.score = Math.max(st.score - 2, st.levelStartScore || 0); beep(220, 0.2); popText(it, "−2", "#ff8a65");
+    }
     else { var pts = it.kind === "gold" ? 3 : 1; st.score += pts; beep(it.kind === "gold" ? 990 : 660); popText(it, "+" + pts, it.kind === "gold" ? "gold" : "#fff"); }
     it.el.remove(); st.items.splice(st.items.indexOf(it), 1); hud();
     if (st.lives <= 0) endGame("out_of_lives");
@@ -86,7 +99,7 @@
     if (st.paused) { st.last = ts; return requestAnimationFrame(loop); }
     var dt = st.last ? Math.min(0.05, (ts - st.last) / 1000) : 0; st.last = ts;
     st.timeLeft -= dt; st.spawnAcc += dt;
-    var every = Math.max(0.3, 0.85 - st.level * 0.15);
+    var every = Math.max(0.3, 0.85 - step(st.level) * 0.15);
     while (st.spawnAcc > every) { st.spawnAcc -= every; spawn(); }
     var h = field.clientHeight;
     for (var i = st.items.length - 1; i >= 0; i--) {
@@ -100,7 +113,7 @@
   }
 
   function startLevel() {
-    st.timeLeft = C.LEVEL_SECONDS; st.last = 0; st.spawnAcc = 0; st.running = true; st.paused = false;
+    st.timeLeft = C.LEVEL_SECONDS; st.last = 0; st.spawnAcc = 0; st.running = true; st.paused = false; st.levelStartScore = st.score;
     track("level_started", { level: st.level });
     hud(); requestAnimationFrame(loop);
   }
@@ -181,7 +194,7 @@
   $("btnResume").onclick = function () { st.paused = false; show("paused", false); track("resume_clicked", { level: st.level }); };
   document.addEventListener("visibilitychange", function () { if (document.hidden) pause(); });
   $("btnHint").onclick = function () {
-    st.hintsUsed++; toast(t("hintText"), 2600);
+    st.hintsUsed++; showRules();
     st.items.forEach(function (it) { if (it.kind === "gold") it.el.classList.add("hint"); });
     track("hint_clicked", { level: st.level, in_game: st.running });
   };

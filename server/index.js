@@ -29,8 +29,11 @@ const G = {
   LEVELS: 2,
   LEVEL_SECONDS: 60,
   GOLD_P: 0.12,                                   // spawn(): r < 0.12 -> gold (+3)
-  chilliP: (l) => 0.18 + l * 0.05,                // spawn(): chilli probability
-  spawnEvery: (l) => Math.max(0.3, 0.85 - l * 0.15), // loop(): seconds between spawns
+  step: (l) => (l >= 2 ? 3 : l),                  // game.js step(): level 2 uses the old level-3 speed/spawn rate
+  // spawn(): share of NEGATIVE items (level 1: chillies; level 2: apples −2 pts + chillies −1 life).
+  // Negatives never add points, so they only count as "not a +1 mango" in the max below.
+  chilliP: (l) => 0.18 + G.step(l) * 0.05,
+  spawnEvery: (l) => Math.max(0.3, 0.85 - G.step(l) * 0.15), // loop(): seconds between spawns
   TIME_TOLERANCE_S: 8,                            // network / timer slack per check
   HINT_PENALTY: 5
 };
