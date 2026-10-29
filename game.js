@@ -7,6 +7,28 @@
   var best = +(localStorage.getItem("best") || 0);
   $("bestScore").textContent = best; $("levels").textContent = C.LEVELS;
 
+  // ---------- player name (local only: never sent to analytics or the leaderboard) ----------
+  var NAME_MAX = 20;
+  function cleanName(v) {
+    var s = String(v || "").replace(/[\u0000-\u001f\u007f-\u009f\u200b-\u200f\u2028-\u202e\u2066-\u2069]/g, "")
+      .replace(/\s+/g, " ").trim();
+    return Array.from(s).slice(0, NAME_MAX).join("").trim();
+  }
+  var savedName = ""; try { savedName = cleanName(localStorage.getItem("playerName")); } catch (e) {}
+  $("playerName").value = savedName;
+  function playerName() { return cleanName($("playerName").value) || t("defaultName"); }
+  function showName() { var n = playerName(); $("hudName").textContent = "👤 " + n; $("hudName").title = n; }
+  function fill(key, vars) { // safe templating: plain split/join, result is only ever used as textContent
+    var s = t(key); Object.keys(vars).forEach(function (k) { s = s.split("{" + k + "}").join(vars[k]); }); return s;
+  }
+  $("playerName").addEventListener("input", showName);
+  $("playerName").addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); $("btnStart").click(); } });
+  window.onLangApplied = function () {
+    if (!$("playerName")) return;
+    showName();
+    if ($("over").classList.contains("show")) $("overName").textContent = fill("wellPlayed", { name: playerName(), n: st.score });
+  };
+
   applyLang(localStorage.getItem("lang") || "en");
   track("app_opened", { referrer: document.referrer || "direct", screen_w: innerWidth });
 
@@ -97,7 +119,7 @@
   function startGame(via) {
     st.level = 1; st.score = 0; st.lives = C.LIVES; st.hintsUsed = 0; st.startedAt = Date.now();
     clearItems(); ["start", "over", "paused", "levelUp"].forEach(function (id) { show(id, false); });
-    track("game_started", { via: via || "start_button", sound_on: st.sound });
+    track("game_started", { via: via || "start_button", sound_on: st.sound, has_name: !!cleanName($("playerName").value) });
     if (window.Scores) Scores.beginRun();
     startLevel();
   }
@@ -110,7 +132,9 @@
                          duration_s: Math.round((Date.now() - st.startedAt) / 1000), hints_used: st.hintsUsed });
     $("overTitle").textContent = t(reason === "completed" ? "youWon" : "gameOver");
     $("overReason").textContent = reason === "completed" ? "" : t("outOfLives");
-    $("finalScore").textContent = st.score; show("over", true);
+    $("finalScore").textContent = st.score;
+    $("overName").textContent = fill("wellPlayed", { name: playerName(), n: st.score });
+    show("over", true);
     saveScore(reason, reason === "completed" ? C.LEVELS : st.level - 1);
   }
 
@@ -138,7 +162,11 @@
   }
 
   // ---------- feature buttons (each one tracked) ----------
-  $("btnStart").onclick = function () { beep(520); startGame("start_button"); };
+  $("btnStart").onclick = function () {
+    var n = cleanName($("playerName").value); $("playerName").value = n;
+    try { if (n) localStorage.setItem("playerName", n); else localStorage.removeItem("playerName"); } catch (e) {}
+    showName(); $("playerName").blur(); beep(520); startGame("start_button");
+  };
   $("btnAgain").onclick = function () { track("restart_clicked", { from: "game_over", prev_score: st.score }); startGame("play_again"); };
   $("btnRestart").onclick = function () {
     if (!st.running && !$("over").classList.contains("show")) return;

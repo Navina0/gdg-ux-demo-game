@@ -28,7 +28,8 @@ window.I18N = {
     scanTitle: "🥭 Mango Catch", scanSub: "Tap the mangoes, dodge the chillies — 3 levels × 60\u00a0s!", play: "▶ Play",
     totalPlayers: "Players", realPlayers: "{n} real", dummyPlayers: "{n} dummy",
     topOverall: "🏆 Top scores", topLevel: "Level {n} best", levelScoreCol: "Level score", noneYet: "No one yet",
-    fullBoard: "Full leaderboard →", livePill: "LIVE", you: "you", liveBoard: "🥭 Live board (scan page)"
+    fullBoard: "Full leaderboard →", livePill: "LIVE", you: "you", liveBoard: "🥭 Live board (scan page)",
+    yourName: "Your name", defaultName: "Player", wellPlayed: "Well played, {name}! Score: {n}"
   },
   ta: {
     title: "மாம்பழம் பிடி", tagline: "மாம்பழங்களைத் தட்டுங்கள், மிளகாய்களைத் தவிர்க்கவும்!",
@@ -57,7 +58,8 @@ window.I18N = {
     scanTitle: "🥭 மாம்பழம் பிடி", scanSub: "மாம்பழங்களைத் தட்டுங்கள், மிளகாயைத் தவிருங்கள் — 3 நிலைகள் × 60\u00a0வி!", play: "▶ விளையாடு",
     totalPlayers: "வீரர்கள்", realPlayers: "{n} உண்மை", dummyPlayers: "{n} மாதிரி",
     topOverall: "🏆 சிறந்த மதிப்பெண்கள்", topLevel: "நிலை {n} சிறந்தவர்கள்", levelScoreCol: "நிலை மதிப்பெண்", noneYet: "இன்னும் யாரும் இல்லை",
-    fullBoard: "முழுப் பட்டியல் →", livePill: "நேரலை", you: "நீங்கள்", liveBoard: "🥭 நேரலைப் பலகை"
+    fullBoard: "முழுப் பட்டியல் →", livePill: "நேரலை", you: "நீங்கள்", liveBoard: "🥭 நேரலைப் பலகை",
+    yourName: "உங்கள் பெயர்", defaultName: "வீரர்", wellPlayed: "நன்றாக விளையாடினீர்கள், {name}! மதிப்பெண்: {n}"
   }
 };
 window.t = function (key, vars) {
@@ -69,5 +71,7 @@ window.applyLang = function (lang) {
   window.currentLang = lang;
   document.documentElement.lang = lang;
   document.querySelectorAll("[data-i18n]").forEach(function (el) { el.textContent = t(el.getAttribute("data-i18n")); });
+  document.querySelectorAll("[data-i18n-ph]").forEach(function (el) { el.placeholder = t(el.getAttribute("data-i18n-ph")); });
+  if (typeof window.onLangApplied === "function") window.onLangApplied(lang);
   try { localStorage.setItem("lang", lang); } catch (e) {}
 };

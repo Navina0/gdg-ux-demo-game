@@ -14,6 +14,7 @@
     <div class="stat"><span data-i18n="level">Level</span> <b id="level">1</b>/<span id="levels">3</span></div>
     <div class="stat"><span data-i18n="time">Time</span> <b id="time">60</b></div>
     <div class="stat" id="lives">❤️❤️❤️</div>
+    <div class="stat player" id="hudName" title="Player"></div>
   </header>
 
   <main id="field" aria-label="game area"></main>
@@ -32,6 +33,8 @@
       <h1 data-i18n="title">Mango Catch</h1>
       <p data-i18n="tagline">Tap the mangoes, avoid the chillies!</p>
       <p class="how" data-i18n="how">Tap 🥭 = +1, glowing 🥭 = +3, 🌶️ = lose a life. 3 levels, 60 seconds each.</p>
+      <label class="name-label" for="playerName" data-i18n="yourName">Your name</label>
+      <input id="playerName" class="name-input" type="text" maxlength="20" autocomplete="nickname" enterkeyhint="go" spellcheck="false" placeholder="Your name" data-i18n-ph="yourName">
       <button id="btnStart" class="primary" data-i18n="start">Start</button>
       <p class="best"><span data-i18n="best">Best</span>: <b id="bestScore">0</b></p>
       <p class="small"><a id="lnkLbStart" href="leaderboard.html?from=start" data-i18n="lbLink">🏆 Leaderboard</a></p>
@@ -54,6 +57,7 @@
     <div class="card">
       <h2 id="overTitle">Game Over</h2>
       <p id="overReason"></p>
+      <p id="overName" class="over-name"></p>
       <div class="big" id="finalScore">0</div>
       <p id="firstMsg" class="first-msg" data-i18n="firstFinisher" hidden>🥇 You are the first to finish all 3 levels!</p>
       <p id="submitStatus" class="status"></p>

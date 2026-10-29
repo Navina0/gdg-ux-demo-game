@@ -30,3 +30,9 @@ html,body{margin:0;height:100%;overflow:hidden;font-family:system-ui,-apple-syst
 .first-msg{background:#fff3c4;border:2px solid #f4b400;border-radius:12px;padding:8px 10px;font-weight:800;margin:6px 0}
 .status{font-size:13px;min-height:1em;margin:6px 0 0;color:#1b5e20}
 .status.err{color:#c62828}
+/* player name */
+.name-label{display:block;text-align:left;font-size:13px;font-weight:700;color:#1b5e20;margin:12px 0 4px}
+.name-input{display:block;width:100%;padding:12px 14px;border:2px solid #c8e6c9;border-radius:14px;font-size:17px;font-family:inherit;color:#1b3d1b;background:#f6fff6;outline:none}
+.name-input:focus{border-color:#ff9800}
+.over-name{font-size:17px;font-weight:800;margin:4px 0 0;color:#1b5e20;overflow-wrap:anywhere}
+#hud .player{max-width:28%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}
