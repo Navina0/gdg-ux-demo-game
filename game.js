@@ -146,7 +146,8 @@
     if (!window.Scores) return;
     var score = st.score, hints = st.hintsUsed;
     status.textContent = t("saving");
-    Scores.finish({ score: score, levelsCompleted: levelsCompleted, hintsUsed: hints, reason: reason }).then(function (r) {
+    // name goes to the score store only (never to analytics); blank → "Player" (not the translated default)
+    Scores.finish({ score: score, levelsCompleted: levelsCompleted, hintsUsed: hints, reason: reason, name: cleanName($("playerName").value) || "Player" }).then(function (r) {
       var current = my === runSeq && $("over").classList.contains("show");
       if (r && r.ok) {
         track("score_submitted", { score: score, hints_used: hints, levels_completed: levelsCompleted,

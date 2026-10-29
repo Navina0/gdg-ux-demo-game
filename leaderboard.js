@@ -24,8 +24,11 @@
     v.entries.slice(0, 100).forEach(function (e) {
       var tr = document.createElement("tr"); if (e.rank <= 3) tr.className = "top"; if (e.dummy) tr.className += " dummy";
       cell(tr, "rank", (e.rank === 1 ? "🥇 " : e.rank === 2 ? "🥈 " : e.rank === 3 ? "🥉 " : "") + e.rank);
-      cell(tr, "score", '<span class="who">' + mangoAvatar(e.pid, 34) + "<b>" + e.score + "</b>" + (e.dummy ? dummyTag() : "") +
+      var sc = cell(tr, "score", '<span class="who">' + mangoAvatar(e.pid, 34) + (e.dummy ? "" : '<span class="pname"></span>') +
+        "<b>" + e.score + "</b>" + (e.dummy ? dummyTag() : "") +
         (e.first ? '<span class="badge">🏁 ' + esc(t("firstBadge")) + "</span>" : "") + "</span>");
+      // player-typed name: plain text only (textContent), never HTML. Old entries without a name → "Player".
+      if (!e.dummy) { var pn = sc.querySelector(".pname"); pn.textContent = e.name || "Player"; pn.title = pn.textContent; }
       cell(tr, "hints" + (e.hints >= 3 ? " many" : ""), String(e.hints));
       cell(tr, "adj", String(e.adjusted));
       cell(tr, "levels", e.levels + "/" + (C.LEVELS || 2));

@@ -1,5 +1,6 @@
 /* Leaderboard client: talks to the server-validated API (config LEADERBOARD_API).
- * No names or other input are collected — scores are saved automatically.
+ * Scores are saved automatically; the final /score also carries the player's display name
+ * (cleaned in scores.js, re-validated by the server, falls back to "Player").
  * Flow: /health on page load (wakes the free Render service) → /session/start
  * (signed session, server start time) → /session/progress after each level →
  * /score at game over. All validation happens on the server. */

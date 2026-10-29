@@ -3,12 +3,20 @@
  *   2. otherwise                          → the Render API (lb.js, server-validated) if it answers
  *   3. if Render is unreachable           → demo mode: dummy players + scores saved on this device
  * Dummy players come from dummy_players.json and are merged client-side (never written to a store).
- * No names or other input are ever collected. */
+ * The only player input stored is the display name typed on the start screen, sent with the
+ * FINAL score only (same rule as the server: 1–20 letters/marks/digits/space . _ ' -, else "Player").
+ * Names are always rendered with textContent by leaderboard.js / scan.js, never as HTML. */
 (function () {
   var C = window.GAME_CONFIG || {};
   var P = C.HINT_PENALTY || 5, LEVELS = C.LEVELS || 2;
   var FB = C.FIREBASE_CONFIG || null;
   var FB_VER = "10.12.2", LOCAL_KEY = "mc_local_scores";
+  var DEFAULT_NAME = "Player", NAME_RE = /^[\p{L}\p{M}\p{N} ._'-]+$/u;
+  function cleanName(v) {   // mirrors server/index.js cleanName and the firestore.rules size check
+    if (typeof v !== "string") return DEFAULT_NAME;
+    var s = v.normalize("NFC").replace(/\s+/gu, " ").trim(), n = Array.from(s).length;
+    return n >= 1 && n <= 20 && NAME_RE.test(s) ? s : DEFAULT_NAME;
+  }
 
   // ---------- Firebase (lazy, modular SDK from gstatic) ----------
   var fbP = null;
@@ -33,7 +41,7 @@
   function norm(e, extra) {
     var ls = (e.levelScores || e.level_scores || [0, 0, 0]).slice(0, 3);
     while (ls.length < 3) ls.push(0);
-    var o = { pid: String(e.pid || e.session_id || "x"), score: e.score | 0, hints: (e.hints != null ? e.hints : e.hints_used) | 0,
+    var o = { pid: String(e.pid || e.session_id || "x"), name: typeof e.name === "string" && e.name ? e.name : null, score: e.score | 0, hints: (e.hints != null ? e.hints : e.hints_used) | 0,
               levels: Math.min(LEVELS, (e.levels != null ? e.levels : e.level) | 0), levelScores: ls, first: !!e.first, dummy: false, at: +e.at || 0 };
     Object.assign(o, extra || {});
     o.adjusted = o.score - P * o.hints;
@@ -68,7 +76,7 @@
       var x = d.data ? d.data() : d; if (x.dummy) return;
       var at = x.created_at && x.created_at.toMillis ? x.created_at.toMillis() : Date.now();
       var cur = bySess[x.session_id];
-      var cand = { pid: x.session_id, score: x.score, hints_used: x.hints_used, level: x.level, level_scores: x.level_scores, at: at, final: !!x.final };
+      var cand = { pid: x.session_id, name: x.name, score: x.score, hints_used: x.hints_used, level: x.level, level_scores: x.level_scores, at: at, final: !!x.final };
       if (!cur || (cand.final && !cur.final) || (cand.final === cur.final && cand.score + cand.level * 1000 > cur.score + cur.level * 1000)) bySess[x.session_id] = cand;
     });
     var list = Object.keys(bySess).map(function (k) { return norm(bySess[k]); });
@@ -137,11 +145,13 @@
   function fsWrite(r, state, final) {
     return fb().then(function (f) {
       var id = r.sid + (final ? "_final" : "_p" + state.levelsCompleted);
-      return f.fs.setDoc(f.fs.doc(f.db, "scores", id), {
+      var doc = {
         session_id: r.sid, score: state.score, hints_used: state.hintsUsed, level: state.levelsCompleted,
         level_scores: levelScoresOf(r, state.score, state.levelsCompleted), final: !!final, dummy: false,
         started_at: f.fs.Timestamp.fromMillis(r.t0), created_at: f.fs.serverTimestamp()
-      });
+      };
+      if (final) doc.name = cleanName(state.name);
+      return f.fs.setDoc(f.fs.doc(f.db, "scores", id), doc);
     });
   }
   function rankOf(pid) {
@@ -168,10 +178,11 @@
     finish: function (state) {
       if (!run) return Promise.resolve({ ok: false, error: "no_run" });
       var r = run; run = null;
+      state = Object.assign({}, state, { name: cleanName(state.name) });
       while (r.marks.length <= state.levelsCompleted) r.marks.push(state.score);
       var adj = state.score - P * state.hintsUsed;
       function local() {
-        var e = { pid: "local-" + r.sid.slice(0, 10), score: state.score, hints: state.hintsUsed, levels: state.levelsCompleted,
+        var e = { pid: "local-" + r.sid.slice(0, 10), name: state.name, score: state.score, hints: state.hintsUsed, levels: state.levelsCompleted,
                   levelScores: levelScoresOf(r, state.score, state.levelsCompleted), at: Date.now() };
         localSave(e);
         return dummiesP.then(function (dum) {

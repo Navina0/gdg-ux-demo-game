@@ -13,14 +13,20 @@
  * made fully cheat-proof. This API makes cheating hard: it never trusts timing from the
  * client, signs sessions, bounds the score by what the game can physically spawn in the
  * elapsed server time, enforces 60 s per level, one submission per session, rate limits.
- * No player names are collected — scores are saved automatically at game over.
+ * Scores are saved automatically at game over. The player may type a display name
+ * on the start screen; it is sent with the final /score only (see cleanName below).
+ *
+ * Name policy (/score body field `name`): trimmed, whitespace collapsed, 1–20 characters
+ * (Unicode code points); allowed: letters, combining marks and digits in any script
+ * (\p{L}\p{M}\p{N}, so Tamil works), space, "." "-" "_" "'". A missing, empty, too long
+ * or otherwise invalid name never rejects the score: it FALLS BACK to "Player".
  */
 const express = require("express");
 const crypto = require("crypto");
 
 // ---- game constants (must mirror config.js / game.js) ----
 const G = {
-  LEVELS: 3,
+  LEVELS: 2,
   LEVEL_SECONDS: 60,
   GOLD_P: 0.12,                                   // spawn(): r < 0.12 -> gold (+3)
   chilliP: (l) => 0.18 + l * 0.05,                // spawn(): chilli probability
@@ -98,6 +104,15 @@ function verifySig(id, t0, sig) {
 }
 
 const int = (v) => (Number.isInteger(v) ? v : NaN);
+
+const DEFAULT_NAME = "Player";
+const NAME_RE = /^[\p{L}\p{M}\p{N} ._'-]+$/u;
+function cleanName(v) {
+  if (typeof v !== "string") return DEFAULT_NAME;
+  const s = v.normalize("NFC").replace(/\s+/gu, " ").trim();
+  const len = [...s].length;
+  return len >= 1 && len <= 20 && NAME_RE.test(s) ? s : DEFAULT_NAME;
+}
 
 // ---- app ----
 const app = express();
@@ -193,7 +208,7 @@ async function applyState(req, res, isFinal) {
     await store.set(K.sess(s.id), JSON.stringify(s), SESSION_TTL_S);
     return res.json({ ok: true, adjustedScore: score - G.HINT_PENALTY * hints });
   }
-  // Final, automatic submission (no name/input). One per session.
+  // Final, automatic submission. One per session. Name: see cleanName (falls back to "Player").
   s.final = true; s.submitted = true;
   s.reason = req.body.reason === "completed" && levels === G.LEVELS ? "completed" : "out_of_lives";
   s.first = levels === G.LEVELS ? await store.setNX(K.first, s.id) : false;
@@ -204,15 +219,16 @@ async function applyState(req, res, isFinal) {
     if (i < levels) levelScores[i] = Math.max(0, (marks[i + 1] || 0) - (marks[i] || 0));
     else if (i === levels) levelScores[i] = Math.max(0, score - (marks[levels] || 0));
   }
-  const entry = { id: s.id, pid: pidOf(s.id), level_scores: levelScores, score, hints, levels, adjusted: score - G.HINT_PENALTY * hints, first: !!s.first,
-                  at: now, duration_s: Math.round((now - s.t0) / 1000) };
+  const name = cleanName(req.body.name);
+  const entry = { id: s.id, pid: pidOf(s.id), name, level_scores: levelScores, score, hints, levels, adjusted: score - G.HINT_PENALTY * hints, first: !!s.first,
+                  completed: s.reason === "completed", at: now, duration_s: Math.round((now - s.t0) / 1000) };
   await store.hset(K.entries, s.id, JSON.stringify(entry));
   const all = await sorted();
-  res.json({ ok: true, pid: entry.pid, levelScores, firstFinisher: !!s.first, adjustedScore: entry.adjusted, rank: all.findIndex((e) => e.id === s.id) + 1, total: all.length });
+  res.json({ ok: true, pid: entry.pid, name, completed: entry.completed, levelScores, firstFinisher: !!s.first, adjustedScore: entry.adjusted, rank: all.findIndex((e) => e.id === s.id) + 1, total: all.length });
 }
 // Per-level checkpoint (game.js levelDone)
 app.post("/session/progress", rateLimit("progress", 1500, 600), (req, res, next) => applyState(req, res, false).catch(next));
-// Final score at game over — saved automatically, no name required
+// Final score at game over — saved automatically; optional `name` (falls back to "Player")
 app.post("/score", rateLimit("score", 300, 600), (req, res, next) => applyState(req, res, true).catch(next));
 
 async function sorted() {
@@ -221,7 +237,7 @@ async function sorted() {
     .sort((a, b) => b.adjusted - a.adjusted || b.score - a.score || a.hints - b.hints || a.at - b.at);
 }
 const pidOf = (id) => crypto.createHash("sha256").update("pid:" + id).digest("hex").slice(0, 12);
-const publicEntry = (e) => ({ pid: e.pid || pidOf(e.id), levelScores: e.level_scores || [0, 0, 0], score: e.score, hints: e.hints, levels: e.levels, adjusted: e.adjusted, first: e.first, at: e.at });
+const publicEntry = (e) => ({ pid: e.pid || pidOf(e.id), name: typeof e.name === "string" ? e.name : null, completed: !!e.completed, levelScores: e.level_scores || [0, 0, 0], score: e.score, hints: e.hints, levels: e.levels, adjusted: e.adjusted, first: e.first, at: e.at });
 
 app.get("/leaderboard", async (req, res) => {
   const all = await sorted();
@@ -258,4 +274,4 @@ if (require.main === module) {
   const port = process.env.PORT || 10000;
   app.listen(port, () => console.log("mango-catch-api listening on", port, "store:", store.kind, "origins:", ALLOWED.join(",")));
 }
-module.exports = { app, plausibleMax, maxScoreFor };
+module.exports = { app, plausibleMax, maxScoreFor, cleanName };

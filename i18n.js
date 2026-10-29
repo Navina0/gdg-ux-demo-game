@@ -29,7 +29,8 @@ window.I18N = {
     totalPlayers: "Players", realPlayers: "{n} real", dummyPlayers: "{n} dummy",
     topOverall: "🏆 Top scores", topLevel: "Level {n} best", levelScoreCol: "Level score", noneYet: "No one yet",
     fullBoard: "Full leaderboard →", livePill: "LIVE", you: "you", liveBoard: "🥭 Live board (scan page)",
-    yourName: "Your name", defaultName: "Player", wellPlayed: "Well played, {name}! Score: {n}"
+    yourName: "Your name", defaultName: "Player", wellPlayed: "Well played, {name}! Score: {n}",
+    nameWarning: "Your name will be shown on the public leaderboard."
   },
   ta: {
     title: "மாம்பழம் பிடி", tagline: "மாம்பழங்களைத் தட்டுங்கள், மிளகாய்களைத் தவிர்க்கவும்!",
@@ -59,7 +60,8 @@ window.I18N = {
     totalPlayers: "வீரர்கள்", realPlayers: "{n} உண்மை", dummyPlayers: "{n} மாதிரி",
     topOverall: "🏆 சிறந்த மதிப்பெண்கள்", topLevel: "நிலை {n} சிறந்தவர்கள்", levelScoreCol: "நிலை மதிப்பெண்", noneYet: "இன்னும் யாரும் இல்லை",
     fullBoard: "முழுப் பட்டியல் →", livePill: "நேரலை", you: "நீங்கள்", liveBoard: "🥭 நேரலைப் பலகை",
-    yourName: "உங்கள் பெயர்", defaultName: "வீரர்", wellPlayed: "நன்றாக விளையாடினீர்கள், {name}! மதிப்பெண்: {n}"
+    yourName: "உங்கள் பெயர்", defaultName: "வீரர்", wellPlayed: "நன்றாக விளையாடினீர்கள், {name}! மதிப்பெண்: {n}",
+    nameWarning: "உங்கள் பெயர் பொது லீடர்போர்டில் தெரியும்."
   }
 };
 window.t = function (key, vars) {

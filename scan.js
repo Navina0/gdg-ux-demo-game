@@ -20,6 +20,16 @@
   }
   function medal(r) { return r === 1 ? "🥇" : r === 2 ? "🥈" : r === 3 ? "🥉" : String(r); }
 
+  // Player names are filled in AFTER the markup is built, with textContent only (never parsed as HTML).
+  // Dummy players have no name: their row keeps the existing DUMMY label. Old entries without a name → "Player".
+  function setNames(root, list) {
+    var els = root.querySelectorAll(".pname");
+    list.forEach(function (e, k) {
+      var el = els[k]; if (!el) return;
+      if (e.dummy) { el.remove(); return; }
+      el.textContent = e.name || "Player"; el.title = el.textContent;
+    });
+  }
   var last = null;
   function render(v) {
     last = v;
@@ -30,20 +40,23 @@
     var note = v.state === "waking" ? t("lbWaking") : v.state === "demo" ? t("demoNote") : v.state === "loading" ? "…" : "";
     $("note").hidden = !note; $("note").textContent = note;
 
-    $("top").innerHTML = v.entries.slice(0, 10).map(function (e) {
+    var top = v.entries.slice(0, 10);
+    $("top").innerHTML = top.map(function (e) {
       return '<li class="row' + (e.dummy ? " dummy" : "") + (e.rank === 1 ? " r1" : "") + '"><span class="rk">' + medal(e.rank) + "</span>" +
-        mangoAvatar(e.pid, 46) + '<div class="info"><div class="sc">' + e.score + tags(e) + "</div>" +
+        mangoAvatar(e.pid, 46) + '<div class="info"><div class="pname"></div><div class="sc">' + e.score + tags(e) + "</div>" +
         '<div class="meta">💡 ' + esc(t("colHints")) + ": " + e.hints + " · " + esc(t("colLevels")) + ": " + e.levels + "/" + (C.LEVELS || 2) + "</div></div>" +
         '<div class="adj">' + e.adjusted + "<small>" + esc(t("colAdj")) + "</small></div></li>";
     }).join("") || '<li class="empty">' + esc(t("lbEmpty")) + "</li>";
+    setNames($("top"), top);
 
     $("levels").innerHTML = v.perLevel.map(function (list, i) {
       return '<div class="lv"><h3>' + ["🟢", "🟠", "🔴"][i] + " " + esc(t("topLevel", { n: i + 1 })) + "</h3><ol>" +
         (list.slice(0, 5).map(function (e, j) {
           return '<li class="row' + (e.dummy ? " dummy" : "") + '"><span class="rk">' + medal(j + 1) + "</span>" + mangoAvatar(e.pid, 34) +
-            '<div class="info"><div class="sc">' + e.levelScores[i] + tags(e) + '</div><div class="meta">💡 ' + e.hints + "</div></div></li>";
+            '<div class="info"><div class="pname"></div><div class="sc">' + e.levelScores[i] + tags(e) + '</div><div class="meta">💡 ' + e.hints + "</div></div></li>";
         }).join("") || '<li class="empty">' + esc(t("noneYet")) + "</li>") + "</ol></div>";
     }).join("");
+    v.perLevel.forEach(function (list, i) { var ol = $("levels").querySelectorAll(".lv ol")[i]; if (ol) setNames(ol, list.slice(0, 5)); });
     $("updated").textContent = t("lbUpdated", { t: new Date().toLocaleTimeString() });
   }
   Scores.subscribe(render);

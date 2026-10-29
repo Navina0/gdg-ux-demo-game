@@ -34,7 +34,8 @@
       <p data-i18n="tagline">Tap the mangoes, avoid the chillies!</p>
       <p class="how" data-i18n="how">Tap 🥭 = +1, glowing 🥭 = +3, 🌶️ = lose a life. 2 levels, 60 seconds each.</p>
       <label class="name-label" for="playerName" data-i18n="yourName">Your name</label>
-      <input id="playerName" class="name-input" type="text" maxlength="20" autocomplete="nickname" enterkeyhint="go" spellcheck="false" placeholder="Your name" data-i18n-ph="yourName">
+      <input id="playerName" class="name-input" type="text" maxlength="20" autocomplete="nickname" enterkeyhint="go" spellcheck="false" placeholder="Your name" data-i18n-ph="yourName" aria-describedby="nameNote">
+      <p id="nameNote" class="name-note" data-i18n="nameWarning">Your name will be shown on the public leaderboard.</p>
       <button id="btnStart" class="primary" data-i18n="start">Start</button>
       <p class="best"><span data-i18n="best">Best</span>: <b id="bestScore">0</b></p>
       <p class="small"><a id="lnkLbStart" href="leaderboard.html?from=start" data-i18n="lbLink">🏆 Leaderboard</a></p>
