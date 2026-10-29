@@ -33,7 +33,7 @@
     $("top").innerHTML = v.entries.slice(0, 10).map(function (e) {
       return '<li class="row' + (e.dummy ? " dummy" : "") + (e.rank === 1 ? " r1" : "") + '"><span class="rk">' + medal(e.rank) + "</span>" +
         mangoAvatar(e.pid, 46) + '<div class="info"><div class="sc">' + e.score + tags(e) + "</div>" +
-        '<div class="meta">💡 ' + esc(t("colHints")) + ": " + e.hints + " · " + esc(t("colLevels")) + ": " + e.levels + "/" + (C.LEVELS || 3) + "</div></div>" +
+        '<div class="meta">💡 ' + esc(t("colHints")) + ": " + e.hints + " · " + esc(t("colLevels")) + ": " + e.levels + "/" + (C.LEVELS || 2) + "</div></div>" +
         '<div class="adj">' + e.adjusted + "<small>" + esc(t("colAdj")) + "</small></div></li>";
     }).join("") || '<li class="empty">' + esc(t("lbEmpty")) + "</li>";
 

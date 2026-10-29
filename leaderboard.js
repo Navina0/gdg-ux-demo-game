@@ -28,7 +28,7 @@
         (e.first ? '<span class="badge">🏁 ' + esc(t("firstBadge")) + "</span>" : "") + "</span>");
       cell(tr, "hints" + (e.hints >= 3 ? " many" : ""), String(e.hints));
       cell(tr, "adj", String(e.adjusted));
-      cell(tr, "levels", e.levels + "/" + (C.LEVELS || 3));
+      cell(tr, "levels", e.levels + "/" + (C.LEVELS || 2));
       tb.appendChild(tr);
     });
     $("tbl").hidden = v.entries.length === 0;

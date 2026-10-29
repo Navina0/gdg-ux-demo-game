@@ -6,7 +6,7 @@
  * No names or other input are ever collected. */
 (function () {
   var C = window.GAME_CONFIG || {};
-  var P = C.HINT_PENALTY || 5, LEVELS = C.LEVELS || 3;
+  var P = C.HINT_PENALTY || 5, LEVELS = C.LEVELS || 2;
   var FB = C.FIREBASE_CONFIG || null;
   var FB_VER = "10.12.2", LOCAL_KEY = "mc_local_scores";
 
@@ -34,7 +34,7 @@
     var ls = (e.levelScores || e.level_scores || [0, 0, 0]).slice(0, 3);
     while (ls.length < 3) ls.push(0);
     var o = { pid: String(e.pid || e.session_id || "x"), score: e.score | 0, hints: (e.hints != null ? e.hints : e.hints_used) | 0,
-              levels: (e.levels != null ? e.levels : e.level) | 0, levelScores: ls, first: !!e.first, dummy: false, at: +e.at || 0 };
+              levels: Math.min(LEVELS, (e.levels != null ? e.levels : e.level) | 0), levelScores: ls, first: !!e.first, dummy: false, at: +e.at || 0 };
     Object.assign(o, extra || {});
     o.adjusted = o.score - P * o.hints;
     return o;
@@ -43,7 +43,7 @@
     var all = real.concat(dummies).sort(function (a, b) {
       return b.adjusted - a.adjusted || b.score - a.score || a.hints - b.hints || a.at - b.at; });
     all.forEach(function (e, i) { e.rank = i + 1; });
-    var perLevel = [0, 1, 2].map(function (i) {
+    var perLevel = [0, 1, 2].slice(0, LEVELS).map(function (i) {
       return all.filter(function (e) { return e.levelScores[i] > 0; })
         .sort(function (a, b) { return b.levelScores[i] - a.levelScores[i] || a.hints - b.hints || a.at - b.at; });
     });
@@ -72,7 +72,7 @@
       if (!cur || (cand.final && !cur.final) || (cand.final === cur.final && cand.score + cand.level * 1000 > cur.score + cur.level * 1000)) bySess[x.session_id] = cand;
     });
     var list = Object.keys(bySess).map(function (k) { return norm(bySess[k]); });
-    // first finisher = earliest real document with level 3 (see README for the race caveat)
+    // first finisher = earliest real document with the final level (LEVELS) (see README for the race caveat)
     var fin = list.filter(function (e) { return e.levels >= LEVELS; }).sort(function (a, b) { return a.at - b.at; })[0];
     if (fin) fin.first = true;
     return list;

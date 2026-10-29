@@ -32,8 +32,8 @@ window.GAME_CONFIG = {
   FIREBASE_CONFIG: null,
 
   GAME_NAME: "mango_catch",
-  LEVELS: 3,
-  LEVEL_SECONDS: 60,   // 3 levels × 60 s = 3 minutes (the server validates against 60 s too)
+  LEVELS: 2,
+  LEVEL_SECONDS: 60,   // 2 levels × 60 s = 2 minutes (the server validates against 60 s too)
   LIVES: 3,
 
   // Leaderboard API (Render free web service, code in /server). Scores are validated
