@@ -3,7 +3,7 @@
 window.I18N = {
   en: {
     title: "Mango Catch", tagline: "Tap the mangoes, avoid the chillies!",
-    how: "Tap 🥭 = +1, glowing 🥭 = +3, 🌶️ = lose a life. 2 levels, 60 seconds each.",
+    how: "Tap 🥭 = +1, glowing 🥭 = +3, 🌶️ = lose a life. 2 levels, 30 seconds each.",
     start: "Start", score: "Score", level: "Level", time: "Time", best: "Best",
     pause: "Pause", resume: "Resume", paused: "Paused", hint: "Hint",
     soundOn: "Sound: On", soundOff: "Sound: Off", restart: "Restart",
@@ -25,7 +25,7 @@ window.I18N = {
     savedLocal: "Saved on this device (demo mode): you are #{n}.", savedNoRank: "Score saved!",
     dummy: "dummy", dummyTitle: "Sample player for the demo — not a real person",
     demoNote: "Demo mode — Firebase not connected yet. Showing sample players and scores from this device.",
-    scanTitle: "🥭 Mango Catch", scanSub: "Tap the mangoes, dodge the chillies — 2 levels × 60\u00a0s!", play: "▶ Play",
+    scanTitle: "🥭 Mango Catch", scanSub: "Tap the mangoes, dodge the chillies — 2 levels × 30\u00a0s!", play: "▶ Play",
     totalPlayers: "Players", realPlayers: "{n} real", dummyPlayers: "{n} dummy",
     topOverall: "🏆 Top scores", topLevel: "Level {n} best", levelScoreCol: "Level score", noneYet: "No one yet",
     fullBoard: "Full leaderboard →", livePill: "LIVE", you: "you", liveBoard: "🥭 Live board (scan page)",
@@ -36,7 +36,7 @@ window.I18N = {
   },
   ta: {
     title: "மாம்பழம் பிடி", tagline: "மாம்பழங்களைத் தட்டுங்கள், மிளகாய்களைத் தவிர்க்கவும்!",
-    how: "🥭 தட்டினால் +1, ஒளிரும் 🥭 +3, 🌶️ தட்டினால் ஒரு உயிர் போகும். 2 நிலைகள், ஒவ்வொன்றும் 60 வினாடிகள்.",
+    how: "🥭 தட்டினால் +1, ஒளிரும் 🥭 +3, 🌶️ தட்டினால் ஒரு உயிர் போகும். 2 நிலைகள், ஒவ்வொன்றும் 30 வினாடிகள்.",
     start: "தொடங்கு", score: "மதிப்பெண்", level: "நிலை", time: "நேரம்", best: "சிறந்தது",
     pause: "இடைநிறுத்து", resume: "தொடர்", paused: "இடைநிறுத்தப்பட்டது", hint: "குறிப்பு",
     soundOn: "ஒலி: ஆன்", soundOff: "ஒலி: ஆஃப்", restart: "மறுதொடக்கம்",
@@ -58,7 +58,7 @@ window.I18N = {
     savedLocal: "இந்தச் சாதனத்தில் சேமிக்கப்பட்டது (டெமோ முறை): நீங்கள் #{n}.", savedNoRank: "மதிப்பெண் சேமிக்கப்பட்டது!",
     dummy: "மாதிரி", dummyTitle: "டெமோவுக்கான மாதிரி வீரர் — உண்மையான நபர் அல்ல",
     demoNote: "டெமோ முறை — Firebase இன்னும் இணைக்கப்படவில்லை. மாதிரி வீரர்களும் இந்தச் சாதனத்தின் மதிப்பெண்களும் காட்டப்படுகின்றன.",
-    scanTitle: "🥭 மாம்பழம் பிடி", scanSub: "மாம்பழங்களைத் தட்டுங்கள், மிளகாயைத் தவிருங்கள் — 2 நிலைகள் × 60\u00a0வி!", play: "▶ விளையாடு",
+    scanTitle: "🥭 மாம்பழம் பிடி", scanSub: "மாம்பழங்களைத் தட்டுங்கள், மிளகாயைத் தவிருங்கள் — 2 நிலைகள் × 30\u00a0வி!", play: "▶ விளையாடு",
     totalPlayers: "வீரர்கள்", realPlayers: "{n} உண்மை", dummyPlayers: "{n} மாதிரி",
     topOverall: "🏆 சிறந்த மதிப்பெண்கள்", topLevel: "நிலை {n} சிறந்தவர்கள்", levelScoreCol: "நிலை மதிப்பெண்", noneYet: "இன்னும் யாரும் இல்லை",
     fullBoard: "முழுப் பட்டியல் →", livePill: "நேரலை", you: "நீங்கள்", liveBoard: "🥭 நேரலைப் பலகை",

@@ -2,12 +2,12 @@
 
 **Scan page (QR target):** https://navina0.github.io/gdg-ux-demo-game/scan.html?utm_source=qr · **Play:** https://navina0.github.io/gdg-ux-demo-game/ · **Leaderboard:** https://navina0.github.io/gdg-ux-demo-game/leaderboard.html · **Dashboard:** https://navina0.github.io/gdg-ux-demo-game/dashboard.html · QR: `qr.svg` / `qr.png` → scan.html (served from the `gh-pages` branch — push changes there)
 
-A 1–3 minute mobile web game (no install, open from a QR code) instrumented with Mixpanel, with one
+A ~1 minute mobile web game (no install, open from a QR code) instrumented with Mixpanel, with one
 deliberately under-discoverable feature: the tiny **EN · த** Tamil/English language switch in the bottom-right corner.
 
 | File | What |
 |---|---|
-| `index.html`, `game.js`, `style.css`, `i18n.js` | The game (3 levels × 60 s; Start, Pause/Resume, Hint, Sound, Restart, Share, Play again, language switch) |
+| `index.html`, `game.js`, `style.css`, `i18n.js` | The game (2 levels × 30 s; Start, Pause/Resume, Hint, Sound, Restart, Share, Play again, language switch) |
 | `config.js` | **The one place to set the Mixpanel token** (placeholder `YOUR_MIXPANEL_PROJECT_TOKEN`) + optional Firebase hook |
 | `analytics.js` | `track()` wrapper → Mixpanel (if a real token) + local log for the dashboard |
 | `dashboard.html` / `dashboard.js` | Built-in analytics page: feature usage %, drop-off funnel, auto-filled AI prompt. Tabs: Sample / This device / Combined |
@@ -52,7 +52,7 @@ Paste your web-app config into `FIREBASE_CONFIG` in `config.js`; `analytics.js` 
   Secrets live only in Render env vars (`REDIS_URL`, `SESSION_SECRET`, `ADMIN_KEY`, `ALLOWED_ORIGIN`).
 - Endpoints: `GET /health`, `POST /session/start`, `POST /session/progress` (after each level),
   `POST /score` (game over, automatic), `GET /leaderboard`, `POST /admin/reset` (header `X-Admin-Key`).
-- Anti-tamper: signed sessions with a server start time; ≥ 60 s per completed level (server clock);
+- Anti-tamper: signed sessions with a server start time; ≥ 30 s per completed level (server clock, 4 s tolerance);
   score capped by what the game can spawn in the elapsed time (spawn rate, gold +3, 6σ allowance);
   values can't go backwards; one final submission per session; per-IP rate limits; CORS + Origin check
   for https://navina0.github.io only. A browser game can never be fully cheat-proof — this is server-validated,
@@ -91,7 +91,7 @@ The leaderboard groups docs by `session_id` and uses the final doc (or the lates
 ### Honesty / caveats
 - Firestore client writes are **rule-validated, not cheat-proof**: the rules enforce types, allowed keys, per-level and total
   score bounds from the game constants, `hints_used ≥ 0`, `dummy == false`, `created_at == request.time`, create-only, and
-  ≥ 60 s per completed level relative to `started_at` — but `started_at` is client-supplied, so a determined person can still
+  ≥ 30 s per completed level relative to `started_at` — but `started_at` is client-supplied, so a determined person can still
   forge a plausible score. The Render API is stronger (server clock + signed sessions) but still not cheat-proof.
 - First finisher (Firestore) = the earliest real doc with `level == 3` (by server `created_at`). Two players finishing in the same
   instant can both briefly see the message; the board then shows the badge only on the earliest.

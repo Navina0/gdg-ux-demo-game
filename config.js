@@ -33,7 +33,7 @@ window.GAME_CONFIG = {
 
   GAME_NAME: "mango_catch",
   LEVELS: 2,
-  LEVEL_SECONDS: 60,   // 2 levels × 60 s = 2 minutes (the server validates against 60 s too)
+  LEVEL_SECONDS: 30,   // 2 levels × 30 s = 1 minute (the server validates against 30 s too)
   LIVES: 3,
 
   // Leaderboard API (Render free web service, code in /server). Scores are validated

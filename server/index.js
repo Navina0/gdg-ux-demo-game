@@ -12,7 +12,7 @@
  * Honest caveat: the game runs in the player's browser, so no client-side game can be
  * made fully cheat-proof. This API makes cheating hard: it never trusts timing from the
  * client, signs sessions, bounds the score by what the game can physically spawn in the
- * elapsed server time, enforces 60 s per level, one submission per session, rate limits.
+ * elapsed server time, enforces 30 s per level, one submission per session, rate limits.
  * Scores are saved automatically at game over. The player may type a display name
  * on the start screen; it is sent with the final /score only (see cleanName below).
  *
@@ -27,14 +27,14 @@ const crypto = require("crypto");
 // ---- game constants (must mirror config.js / game.js) ----
 const G = {
   LEVELS: 2,
-  LEVEL_SECONDS: 60,
+  LEVEL_SECONDS: 30,
   GOLD_P: 0.12,                                   // spawn(): r < 0.12 -> gold (+3)
   step: (l) => (l >= 2 ? 3 : l),                  // game.js step(): level 2 uses the old level-3 speed/spawn rate
   // spawn(): share of NEGATIVE items (level 1: chillies; level 2: apples −2 pts + chillies −1 life).
   // Negatives never add points, so they only count as "not a +1 mango" in the max below.
   chilliP: (l) => 0.18 + G.step(l) * 0.05,
   spawnEvery: (l) => Math.max(0.3, 0.85 - G.step(l) * 0.15), // loop(): seconds between spawns
-  TIME_TOLERANCE_S: 8,                            // network / timer slack per check
+  TIME_TOLERANCE_S: 4,                            // network / timer slack per check (30 s levels)
   HINT_PENALTY: 5
 };
 const SESSION_TTL_S = 2 * 60 * 60;
