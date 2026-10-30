@@ -44,9 +44,9 @@ window.GAME_CONFIG = {
     appId: "1:634482852575:web:50b706ba6d9f2692071f6a"
   },
 
-  // Google Analytics 4 — standalone property (public ID). Every track() is also sent via gtag("event", …).
+  // Google Analytics 4 — property 561606788, Firebase-linked stream of web app "Mango Catch Web" (public ID). Every track() is also sent via gtag("event", …).
   // gtag.js itself is loaded by a <script> tag in index.html / scan.html / leaderboard.html (same ID).
-  GA_MEASUREMENT_ID: "G-6XY4T8T70S",
+  GA_MEASUREMENT_ID: "G-5H41CS4QKG",
 
   GAME_NAME: "mango_catch",
   LEVELS: 2,
