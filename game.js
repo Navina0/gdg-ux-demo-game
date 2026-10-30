@@ -118,6 +118,7 @@
     hud(); requestAnimationFrame(loop);
   }
 
+  var levelTimer = null;
   function levelDone() {
     st.running = false; clearItems();
     track("level_completed", { level: st.level, score: st.score, lives_left: st.lives });
@@ -126,12 +127,28 @@
     if (st.level >= C.LEVELS) return endGame("completed");
     st.level++; beep(880, 0.3);
     $("levelUpText").textContent = t("nextLevel", { n: st.level }); show("levelUp", true);
-    setTimeout(function () { show("levelUp", false); startLevel(); }, 1600);
+    levelTimer = setTimeout(function () { show("levelUp", false); startLevel(); }, 1600);
   }
 
+  // Start only once the leaderboard session is ready: the server times the run from the moment it
+  // created the session, so a session that arrives mid-game made the run look "too fast" and the
+  // score was rejected after play. "Play now" skips the wait (that run is saved on this device only).
+  var startSeq = 0;
   function startGame(via) {
+    var my = ++startSeq;
+    st.running = false; clearTimeout(levelTimer); clearItems();
+    ["start", "over", "paused", "levelUp"].forEach(function (id) { show(id, false); });
+    if (!window.Scores || !Scores.whenReady) return beginGame(via);
+    var done = false;
+    function go() { if (done || my !== startSeq) return; done = true; clearTimeout(slow); show("waking", false); beginGame(via); }
+    var slow = setTimeout(function () { if (!done && my === startSeq) show("waking", true); }, 400);
+    $("btnPlayNow").onclick = go;
+    Scores.whenReady(60000).then(go);
+  }
+
+  function beginGame(via) {
     st.level = 1; st.score = 0; st.lives = C.LIVES; st.hintsUsed = 0; st.startedAt = Date.now();
-    clearItems(); ["start", "over", "paused", "levelUp"].forEach(function (id) { show(id, false); });
+    clearItems(); ["start", "over", "paused", "levelUp", "waking"].forEach(function (id) { show(id, false); });
     track("game_started", { via: via || "start_button", sound_on: st.sound, has_name: !!cleanName($("playerName").value) });
     if (window.Scores) Scores.beginRun();
     startLevel();

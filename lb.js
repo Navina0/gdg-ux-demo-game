@@ -22,20 +22,44 @@
     }).then(function (j) { clearTimeout(timer); return j; }, function (e) { clearTimeout(timer); throw e; });
   }
 
-  var nextP = null, run = null;
+  // A session's clock (t0) starts on the SERVER when /session/start is answered, and the server
+  // checks "N levels need ≥ N×30 s since t0". So a run may only use a session that was ready
+  // BEFORE the run started. On a sleeping free Render instance /session/start can take ~50 s;
+  // a run started meanwhile used to get a late t0 and was rejected as "completed_too_fast"
+  // after the game. Now: game.js waits for LB.ready() before starting, and a run that starts
+  // without a ready session is played offline (score kept on this device).
+  var STALE_MS = 90 * 60 * 1000;   // server sessions expire after 2 h — refresh well before that
+  var nextP = null, nextAt = 0, nextSess, run = null;   // nextSess: undefined = pending, null = failed, object = ready
   function prefetch() {
-    nextP = call("/session/start", {}).then(function (j) { return j && j.ok ? j : null; }).catch(function () { return null; });
+    var p = call("/session/start", {}).then(function (j) { return j && j.ok ? j : null; }).catch(function () { return null; });
+    nextP = p; nextAt = Date.now(); nextSess = undefined;
+    p.then(function (s) { if (nextP === p) nextSess = s; });
+  }
+  function freshNext() {   // make sure a usable (or in-flight) session is queued
+    if (!nextP || nextSess === null || (nextSess && Date.now() - nextAt > STALE_MS)) prefetch();
   }
 
   window.LB = {
     api: API,
     call: call,
+    // Resolves true when a session is ready (false on failure or after `ms`).
+    ready: function (ms) {
+      if (!API) return Promise.resolve(true);
+      freshNext();
+      if (nextSess) return Promise.resolve(true);
+      var p = nextP;
+      return new Promise(function (res) {
+        var t = setTimeout(function () { res(false); }, ms || 60000);
+        p.then(function (s) { clearTimeout(t); res(!!s); });
+      });
+    },
     beginRun: function () {
       if (!API) return;
-      if (!nextP) prefetch();
-      var p = nextP; nextP = null;
+      freshNext();
+      if (!nextSess) { run = { sessP: Promise.resolve(null), chain: Promise.resolve(null), offline: true }; return; } // not ready → offline run
+      var s = nextSess, p = Promise.resolve(s);
       run = { sessP: p, chain: p };
-      p.then(function () { if (!nextP) prefetch(); });   // have a session ready for "Play again"
+      prefetch();   // have a session ready for "Play again"
     },
     progress: function (state) {
       if (!run) return;
@@ -61,5 +85,5 @@
   };
 
   // Wake the (possibly sleeping) free server on page load, then get a session ready.
-  if (API) call("/health", null, 75000).catch(function () { return null; }).then(function () { if (!nextP) prefetch(); });
+  if (API) call("/health", null, 75000).catch(function () { return null; }).then(function () { freshNext(); });
 })();

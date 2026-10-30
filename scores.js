@@ -164,6 +164,8 @@
   window.Scores = {
     mode: FB ? "firestore" : "render",
     subscribe: subscribe, readOnce: readOnce,
+    // Resolves true when a score session is ready, so the run's server clock starts before play (see lb.js).
+    whenReady: function (ms) { return (!FB && window.LB && LB.ready) ? LB.ready(ms) : Promise.resolve(true); },
     beginRun: function () {
       run = { sid: sid(), t0: Date.now(), marks: [0] };
       if (!FB && window.LB) LB.beginRun();
