@@ -19,7 +19,11 @@
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
   function dummyTag() { return '<span class="dtag" title="' + esc(t("dummyTitle")) + '">' + esc(t("dummy")) + "</span>"; }
 
+  // Firebase Perf custom trace: page start → first real leaderboard data (not "loading"/"waking")
+  var lbTrace = window.OBS ? OBS.trace("leaderboard_load", { page: "leaderboard" }) : null, sawWaking = false;
   Scores.subscribe(function (v) {
+    if (v.state === "waking") sawWaking = true;
+    if (lbTrace && v.state !== "loading" && v.state !== "waking") { lbTrace.metric("entries", v.entries.length).stop({ store: v.store, state: v.state, cold_start: sawWaking }); lbTrace = null; }
     var tb = $("rows"); tb.textContent = "";
     v.entries.slice(0, 100).forEach(function (e) {
       var tr = document.createElement("tr"); if (e.rank <= 3) tr.className = "top"; if (e.dummy) tr.className += " dummy";

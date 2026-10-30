@@ -18,7 +18,7 @@ window.GAME_CONFIG = {
 
   // Mixpanel ingestion host. Use "https://api-eu.mixpanel.com" for EU-residency
   // projects or "https://api-in.mixpanel.com" for India-residency projects.
-  MIXPANEL_API_HOST: "https://api-js.mixpanel.com",
+  MIXPANEL_API_HOST: "https://api-eu.mixpanel.com",   // project 4078385 is an EU-residency project
 
   // Firebase (Firestore score store + Firebase Analytics). null = not connected yet.
   // TODO(Firebase): paste your web app config from Firebase console → Project settings →
@@ -30,6 +30,23 @@ window.GAME_CONFIG = {
   // While it is null, scores go to the Render API below; if that is unreachable,
   // the leaderboard runs in demo mode (dummy players + this device's scores).
   FIREBASE_CONFIG: null,
+
+  // Firebase project "mango-catch" (web app "Mango Catch Web") used ONLY for observability:
+  // Performance Monitoring (traces, page load, network) + Analytics (when measurementId is set).
+  // This is deliberately separate from FIREBASE_CONFIG above, so scores STAY on the Render API.
+  // The Firebase web config is public by design (it identifies the project; it is not a secret).
+  FIREBASE_WEB_CONFIG: {
+    apiKey: "AIzaSyBatL8-8HQkfZjd_Uzw_0iarbOqk2uvr8s",
+    authDomain: "mango-catch.firebaseapp.com",
+    projectId: "mango-catch",
+    storageBucket: "mango-catch.firebasestorage.app",
+    messagingSenderId: "634482852575",
+    appId: "1:634482852575:web:50b706ba6d9f2692071f6a"
+  },
+
+  // Google Analytics 4 — standalone property (public ID). Every track() is also sent via gtag("event", …).
+  // gtag.js itself is loaded by a <script> tag in index.html / scan.html / leaderboard.html (same ID).
+  GA_MEASUREMENT_ID: "G-6XY4T8T70S",
 
   GAME_NAME: "mango_catch",
   LEVELS: 2,

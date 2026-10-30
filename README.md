@@ -17,9 +17,12 @@ deliberately under-discoverable feature: the tiny **EN · த** Tamil/English la
 | `PROMPT_TEMPLATE.md` | Blank + filled ChatGPT prompt |
 
 ## Events tracked
-`app_opened`, `game_started`, `level_started {level}`, `level_completed {level, score}`, `game_over {reason, score, level_reached, levels_completed, duration_s}`,
-`pause_clicked`, `resume_clicked`, `hint_clicked`, `sound_toggled`, `restart_clicked {from}`, `share_clicked {method}`,
-**`language_switch_clicked {from, to, screen}`**. Every event carries `lang`; simulated events carry `simulated: true`.
+Full list with properties and talk points: **`OBSERVABILITY_DEMO.md`**. Each `track()` goes to Mixpanel (with a token), GA4 (`G-6XY4T8T70S`)
+and the local log; Firebase Performance (`observability.js`) records the traces `game_load`, `level_play`, `score_submit` and `leaderboard_load`, plus Web Vitals.
+Main events: `app_opened`, `game_started {start_method}`, `level_started`, `level_completed`, `game_over`, `pause_used`, `resume_used`, `hint_used`,
+`sound_toggled`, `restart_used`, `share_clicked`, `name_entered`, `leaderboard_opened`, `bonus_clicked`, `rage_click`, `web_vital`, `js_error`,
+**`language_changed {from, to, screen}`**. Every event carries `lang`; simulated events carry `simulated: true` (the sample data uses the older names
+`hint_clicked`, `pause_clicked`, `restart_clicked` and `language_switch_clicked`, and the dashboard maps both).
 
 ## Connect Mixpanel (free tier, ~5 min)
 1. Sign up at https://mixpanel.com (free plan) → create a project (choose US, EU or India data residency).
@@ -38,8 +41,9 @@ deliberately under-discoverable feature: the tiny **EN · த** Tamil/English la
 
 Without a token the game works normally and `dashboard.html` shows the sample data plus events from your own device.
 
-## Firebase Analytics (optional)
-Paste your web-app config into `FIREBASE_CONFIG` in `config.js`; `analytics.js` then mirrors every `track()` into `logEvent()`. Off by default.
+## Google Analytics 4 + Firebase Performance
+GA4 runs through plain gtag.js (`GA_MEASUREMENT_ID` in `config.js`), not Firebase Analytics. `FIREBASE_WEB_CONFIG` is used only for Performance Monitoring.
+`FIREBASE_CONFIG` (the Firestore score store) is separate and stays `null`.
 
 ## Leaderboard (server-validated)
 
@@ -79,8 +83,7 @@ The leaderboard groups docs by `session_id` and uses the final doc (or the lates
 ### Connect Firebase (manual, ~10 min, free Spark plan)
 1. https://console.firebase.google.com → **Add project** (Google Analytics on if you want Firebase Analytics).
 2. Project overview → **Web app (</>)** → register → copy the `firebaseConfig` object.
-3. Paste it into `config.js` as `FIREBASE_CONFIG: { ... }` (it's public by design; `measurementId` enables Firebase Analytics,
-   which then receives every `track()` event alongside Mixpanel). Commit to `main` and `gh-pages`.
+3. Paste it into `config.js` as `FIREBASE_CONFIG: { ... }` (it's public by design; analytics go to GA4 via gtag, not through this config). Commit to `main` and `gh-pages`.
 4. Build → **Firestore Database** → Create database → **Production mode**, location e.g. **asia-south1 (Mumbai)**.
 5. Firestore → **Rules** → paste `firestore.rules` → **Publish** (or `firebase deploy --only firestore:rules` with `firebase.json`).
 6. Optional hardening: **App Check** with reCAPTCHA Enterprise for the web app, then *Enforce* for Firestore

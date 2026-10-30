@@ -6,6 +6,8 @@
   ];
   var FUNNEL = [["app_opened", "Opened game (QR)"], ["game_started", "Started game"], ["level_1", "Completed level 1"],
                 ["level_2", "Completed level 2 (finished)"]];
+  // Live events use the observability names (see OBSERVABILITY_DEMO.md); the sample data uses the older names.
+  var ALIAS = { hint_used: "hint_clicked", pause_used: "pause_clicked", restart_used: "restart_clicked", language_changed: "language_switch_clicked" };
   var sample = [], local = [], src = "sample";
   var $ = function (id) { return document.getElementById(id); };
   var tok = localStorage.getItem("mp_token") || (window.GAME_CONFIG || {}).MIXPANEL_TOKEN;
@@ -13,7 +15,7 @@
 
   function loadLocal() {
     try { local = JSON.parse(localStorage.getItem("demo_events") || "[]").map(function (e) {
-      return { event: e.event, time: Math.round(e.time / 1000), session: "local_" + e.session, props: e.props || {} }; }); }
+      return { event: ALIAS[e.event] || e.event, time: Math.round(e.time / 1000), session: "local_" + e.session, props: e.props || {} }; }); }
     catch (e) { local = []; }
   }
   function sessions(evs) {

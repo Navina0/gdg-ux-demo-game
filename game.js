@@ -112,7 +112,12 @@
     requestAnimationFrame(loop);
   }
 
+  // Firebase Performance custom trace per level (see observability.js)
+  var levelTrace = null;
+  function endLevelTrace(outcome) { if (levelTrace) { levelTrace.metric("score", st.score).metric("lives_left", st.lives).stop({ outcome: outcome }); levelTrace = null; } }
   function startLevel() {
+    endLevelTrace("abandoned");
+    if (window.OBS) levelTrace = OBS.trace("level_play", { level: st.level, mode: st.mode || "classic" });
     st.timeLeft = C.LEVEL_SECONDS; st.last = 0; st.spawnAcc = 0; st.running = true; st.paused = false; st.levelStartScore = st.score;
     track("level_started", { level: st.level });
     hud(); requestAnimationFrame(loop);
@@ -120,7 +125,7 @@
 
   var levelTimer = null;
   function levelDone() {
-    st.running = false; clearItems();
+    st.running = false; clearItems(); endLevelTrace("completed");
     track("level_completed", { level: st.level, score: st.score, lives_left: st.lives });
     // leaderboard: per-level save to the server (the final level is saved by endGame)
     if (window.Scores && st.level < C.LEVELS) Scores.progress({ score: st.score, levelsCompleted: st.level, hintsUsed: st.hintsUsed });
@@ -134,28 +139,30 @@
   // created the session, so a session that arrives mid-game made the run look "too fast" and the
   // score was rejected after play. "Play now" skips the wait (that run is saved on this device only).
   var startSeq = 0;
-  function startGame(via) {
+  function startGame(via, extra) {
     var my = ++startSeq;
+    endLevelTrace("restarted");
     st.running = false; clearTimeout(levelTimer); clearItems();
     ["start", "over", "paused", "levelUp"].forEach(function (id) { show(id, false); });
-    if (!window.Scores || !Scores.whenReady) return beginGame(via);
+    if (!window.Scores || !Scores.whenReady) return beginGame(via, extra);
     var done = false;
-    function go() { if (done || my !== startSeq) return; done = true; clearTimeout(slow); show("waking", false); beginGame(via); }
+    function go() { if (done || my !== startSeq) return; done = true; clearTimeout(slow); show("waking", false); beginGame(via, extra); }
     var slow = setTimeout(function () { if (!done && my === startSeq) show("waking", true); }, 400);
     $("btnPlayNow").onclick = go;
     Scores.whenReady(60000).then(go);
   }
 
-  function beginGame(via) {
+  function beginGame(via, extra) {
     st.level = 1; st.score = 0; st.lives = C.LIVES; st.hintsUsed = 0; st.startedAt = Date.now();
     clearItems(); ["start", "over", "paused", "levelUp", "waking"].forEach(function (id) { show(id, false); });
-    track("game_started", { via: via || "start_button", sound_on: st.sound, has_name: !!cleanName($("playerName").value) });
+    track("game_started", Object.assign({ via: via || "quick_play", start_method: via || "quick_play", mode: st.mode || "classic",
+                                          sound_on: st.sound, has_name: !!cleanName($("playerName").value) }, extra || {}));
     if (window.Scores) Scores.beginRun();
     startLevel();
   }
 
   function endGame(reason) {
-    st.running = false; clearItems();
+    st.running = false; clearItems(); endLevelTrace(reason === "completed" ? "completed" : "lost");
     if (st.score > best) { best = st.score; localStorage.setItem("best", best); $("bestScore").textContent = best; }
     track("game_over", { reason: reason, score: st.score, level_reached: st.level,
                          levels_completed: reason === "completed" ? C.LEVELS : st.level - 1,
@@ -193,32 +200,76 @@
   }
 
   // ---------- feature buttons (each one tracked) ----------
-  $("btnStart").onclick = function () {
+  // Two ways to do one thing (like "Scan charger" vs "Enter charger ID"): Quick Play vs Choose mode / Enter code.
+  function prepStart(method) {
     var n = cleanName($("playerName").value); $("playerName").value = n;
     try { if (n) localStorage.setItem("playerName", n); else localStorage.removeItem("playerName"); } catch (e) {}
-    showName(); $("playerName").blur(); beep(520); startGame("start_button");
+    track("name_entered", { entered: n ? "yes" : "no", start_method: method });   // never the name itself
+    showName(); $("playerName").blur(); beep(520);
+  }
+  $("btnStart").onclick = function () {
+    st.mode = "classic"; $("app").classList.remove("night");
+    prepStart("quick_play"); startGame("quick_play");
   };
-  $("btnAgain").onclick = function () { track("restart_clicked", { from: "game_over", prev_score: st.score }); startGame("play_again"); };
+  $("btnChooseMode").onclick = function () {
+    var p = $("modePanel"), open = p.hidden; p.hidden = !open;
+    track("choose_mode_opened", { open: open });
+  };
+  $("btnStartMode").onclick = function () {
+    var m = document.querySelector('input[name="mode"]:checked'), mode = m ? m.value : "classic";
+    var code = String($("roomCode").value || "").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 8);
+    st.mode = mode; $("app").classList.toggle("night", mode === "night");   // cosmetic only: same game, same scoring
+    prepStart("choose_mode");
+    startGame("choose_mode", { has_room_code: !!code, room_code: /^[A-Z0-9]{2,8}$/.test(code) ? code : null });
+  };
+
+  // Deliberately slow "Daily bonus": no feedback for ~1.8 s → people tap again and again (rage clicks).
+  // Purely cosmetic (a sparkle next to the name); it never touches the score.
+  var bonus = { pending: false, claimed: false, clicks: 0, firstAt: 0 };
+  $("btnBonus").onclick = function () {
+    bonus.clicks++;
+    track("bonus_clicked", { click_n: bonus.clicks, pending: bonus.pending, claimed: bonus.claimed });
+    if (bonus.claimed) { toast(t("bonusAlready")); return; }
+    if (bonus.pending) return;   // still "loading", with no spinner on purpose
+    bonus.pending = true; bonus.firstAt = Date.now();
+    setTimeout(function () {
+      bonus.pending = false; bonus.claimed = true;
+      $("btnBonus").classList.add("claimed"); $("hudName").classList.add("sparkle");
+      toast(t("bonusGranted"), 2600); beep(990, 0.2);
+      track("bonus_granted", { wait_ms: Date.now() - bonus.firstAt, clicks_while_waiting: bonus.clicks - 1, cosmetic: true });
+    }, 1800);
+  };
+
+  // Leaderboard links: track, then navigate a moment later so the event can leave the page.
+  ["lnkLbStart", "lnkLbOver"].forEach(function (id) {
+    $(id).addEventListener("click", function (e) {
+      if (e.metaKey || e.ctrlKey || e.shiftKey) return;
+      e.preventDefault(); var href = $(id).href;
+      track("leaderboard_opened", { from: id === "lnkLbStart" ? "start" : "game_over", link: id === "lnkLbStart" ? "hidden_small" : "game_over" });
+      setTimeout(function () { location.href = href; }, 300);
+    });
+  });
+  $("btnAgain").onclick = function () { track("restart_used", { from: "game_over", prev_score: st.score }); startGame("play_again"); };
   $("btnRestart").onclick = function () {
     if (!st.running && !$("over").classList.contains("show")) return;
-    track("restart_clicked", { from: "in_game", level: st.level, prev_score: st.score }); startGame("restart");
+    track("restart_used", { from: "in_game", level: st.level, prev_score: st.score }); startGame("restart");
   };
   function pause() {
     if (!st.running || st.paused) return;
-    st.paused = true; show("paused", true); track("pause_clicked", { level: st.level, time_left: Math.ceil(st.timeLeft) });
+    st.paused = true; show("paused", true); track("pause_used", { level: st.level, time_left: Math.ceil(st.timeLeft) });
   }
   $("btnPause").onclick = pause;
-  $("btnResume").onclick = function () { st.paused = false; show("paused", false); track("resume_clicked", { level: st.level }); };
+  $("btnResume").onclick = function () { st.paused = false; show("paused", false); track("resume_used", { level: st.level }); };
   document.addEventListener("visibilitychange", function () { if (document.hidden) pause(); });
   $("btnHint").onclick = function () {
     st.hintsUsed++; showRules();
     st.items.forEach(function (it) { if (it.kind === "gold") it.el.classList.add("hint"); });
-    track("hint_clicked", { level: st.level, in_game: st.running });
+    track("hint_used", { level: st.level, in_game: st.running, hints_this_run: st.hintsUsed });
   };
   $("btnSound").onclick = function () {
     st.sound = !st.sound; $("btnSound").setAttribute("data-i18n", st.sound ? "soundOn" : "soundOff");
     $("btnSound").textContent = t(st.sound ? "soundOn" : "soundOff"); beep(440);
-    track("sound_toggled", { sound_on: st.sound, level: st.level, in_game: st.running });
+    track("sound_toggled", { state: st.sound ? "on" : "off", sound_on: st.sound, level: st.level, in_game: st.running });
   };
   $("btnShare").onclick = function () {
     var text = t("shareText", { n: st.score }), url = location.origin + location.pathname;
@@ -231,10 +282,14 @@
   // ---------- the deliberately underused feature ----------
   $("btnLang").onclick = function () {
     var from = window.currentLang, to = from === "en" ? "ta" : "en";
-    track("language_switch_clicked", { from: from, to: to, screen: st.running ? "game" : ($("over").classList.contains("show") ? "game_over" : "start") });
+    track("language_changed", { from: from, to: to, screen: st.running ? "game" : ($("over").classList.contains("show") ? "game_over" : "start") });
     applyLang(to);
     $("btnSound").textContent = t(st.sound ? "soundOn" : "soundOff");
     toast(t("langChanged"));
   };
   hud();
+  // game_load: from navigation start until the start screen is ready (Firebase Performance custom trace)
+  if (window.OBS) OBS.record("game_load", performance.timeOrigin || (Date.now() - performance.now()), performance.now(),
+                             { page: "game", from: new URLSearchParams(location.search).get("from") || "direct" });
+  track("start_screen_ready", { load_ms: Math.round(performance.now()) });
 })();

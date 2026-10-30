@@ -77,7 +77,9 @@
       r.chain = r.chain.then(function () {
         return r.sessP.then(function (s) {
           if (!s) return { ok: false, error: "no_session" };
-          return call("/score", Object.assign({ sessionId: s.sessionId, sig: s.sig }, state)).catch(function () { return { ok: false, error: "offline" }; });
+          var tr = window.OBS ? OBS.trace("score_submit", { store: "render", levels: state.levelsCompleted }) : null;   // Firebase Perf custom trace
+          return call("/score", Object.assign({ sessionId: s.sessionId, sig: s.sig }, state)).catch(function () { return { ok: false, error: "offline" }; })
+            .then(function (j) { if (tr) tr.stop({ result: j && j.ok ? "ok" : "rejected", error: j && !j.ok ? String(j.error || "?").slice(0, 40) : "none" }); return j; });
         });
       });
       return r.chain;

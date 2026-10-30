@@ -1,4 +1,5 @@
-/* Thin analytics wrapper: Mixpanel (if a real token is set) + local event log.
+/* Thin analytics wrapper: ONE track() → Mixpanel (if a real token is set) + Google Analytics 4
+ * (gtag, if GA_MEASUREMENT_ID is set) + local event log.
  * Every event is also stored in localStorage so dashboard.html can show
  * "live events from this device" even with no Mixpanel account. */
 (function () {
@@ -6,7 +7,10 @@
   var PLACEHOLDER = "YOUR_MIXPANEL_PROJECT_TOKEN";
   var params = new URLSearchParams(location.search);
   var urlToken = params.get("mp_token");
-  if (urlToken) { try { localStorage.setItem("mp_token", urlToken); } catch (e) {} }
+  if (urlToken) {
+    try { localStorage.setItem("mp_token", urlToken); } catch (e) {}
+    try { params.delete("mp_token"); var qs = params.toString(); history.replaceState(history.state, "", location.pathname + (qs ? "?" + qs : "") + location.hash); } catch (e) {}
+  }
   var token = urlToken || (function(){ try { return localStorage.getItem("mp_token"); } catch(e){ return null; } })() || cfg.MIXPANEL_TOKEN;
   var mpEnabled = !!token && token !== PLACEHOLDER;
 
@@ -22,6 +26,8 @@
 
   if (mpEnabled) {
     // Official Mixpanel JS snippet loader (CDN), then init.
+    // The CDN build expects the official snippet stub on window.mixpanel before it loads.
+    if (!window.mixpanel) { window.mixpanel = []; window.mixpanel._i = []; window.mixpanel.__SV = 1.2; }
     var s = document.createElement("script");
     s.src = "https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";
     s.async = true;
@@ -37,18 +43,27 @@
     document.head.appendChild(s);
   }
 
-  /* ---- Firebase Analytics (on when FIREBASE_CONFIG with a measurementId is set) ----
-   * Uses the modular CDN build. Each track() call is mirrored via logEvent(). */
-  var fbLog = null, fbQueue = [];
-  if (cfg.FIREBASE_CONFIG && cfg.FIREBASE_CONFIG.measurementId) {
-    import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js").then(function (app) {
-      return import("https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js").then(function (an) {
-        var fa = app.getApps().length ? app.getApp() : app.initializeApp(cfg.FIREBASE_CONFIG); // shared with scores.js
-        var a = an.getAnalytics(fa);
-        fbLog = function (n, p) { an.logEvent(a, n, p); };
-        fbQueue.forEach(function (q) { try { fbLog(q[0], q[1]); } catch (e) {} }); fbQueue = [];
-      });
-    }).catch(function (e) { console.warn("Firebase Analytics disabled:", e); });
+  /* ---- Google Analytics 4 (standalone property, gtag.js loaded in the page <head>) ----
+   * Every track() is mirrored as gtag("event", name, params). GA4-safe: snake_case names ≤40 chars,
+   * ≤25 params, string values ≤100 chars, no PII (the player name is never tracked). */
+  var GA_ID = cfg.GA_MEASUREMENT_ID || null;
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+  if (GA_ID) {
+    window.gtag("js", new Date());
+    // page_location / page_referrer are sent without query strings (they could carry ?mp_token=…).
+    window.gtag("config", GA_ID, { page_location: location.origin + location.pathname,
+      page_referrer: (document.referrer || "").split("?")[0], game: cfg.GAME_NAME, demo_session_id: SESSION });
+  }
+  function gaName(n) { return String(n).toLowerCase().replace(/[^a-z0-9_]/g, "_").replace(/^[^a-z]+/, "e_").slice(0, 40); }
+  function gaParams(p) {
+    var o = {}, n = 0;
+    Object.keys(p || {}).forEach(function (k) {
+      if (n >= 25) return; var v = p[k];
+      if (v === null || v === undefined) return;
+      o[gaName(k)] = typeof v === "number" ? v : String(v).slice(0, 100); n++;
+    });
+    return o;
   }
 
   function localLog(name, props) {
@@ -63,10 +78,10 @@
   window.track = function (name, props) {
     props = Object.assign({ lang: (window.currentLang || "en") }, props || {});
     localLog(name, props);
-    if (fbLog) { try { fbLog(name, props); } catch (e) {} } else if (cfg.FIREBASE_CONFIG && cfg.FIREBASE_CONFIG.measurementId && fbQueue.length < 200) fbQueue.push([name, props]);
+    if (GA_ID) { try { window.gtag("event", gaName(name), gaParams(props)); } catch (e) {} }
     if (!mpEnabled) return;
     if (window.mixpanel && window.mixpanel.track && window.mixpanel.__loaded) window.mixpanel.track(name, props);
     else queue.push([name, props]);
   };
-  window.ANALYTICS_STATUS = { mixpanel: mpEnabled, tokenSource: urlToken ? "url" : (token === cfg.MIXPANEL_TOKEN ? "config" : "localStorage"), session: SESSION };
+  window.ANALYTICS_STATUS = { mixpanel: mpEnabled, ga4: !!GA_ID, tokenSource: urlToken ? "url" : (token === cfg.MIXPANEL_TOKEN ? "config" : "localStorage"), session: SESSION };
 })();

@@ -59,12 +59,18 @@
     v.perLevel.forEach(function (list, i) { var ol = $("levels").querySelectorAll(".lv ol")[i]; if (ol) setNames(ol, list.slice(0, 5)); });
     $("updated").textContent = t("lbUpdated", { t: new Date().toLocaleTimeString() });
   }
-  Scores.subscribe(render);
+  // Firebase Perf custom trace: page start → first real leaderboard data (not "loading"/"waking")
+  var lbTrace = window.OBS ? OBS.trace("leaderboard_load", { page: "scan" }) : null, sawWaking = false;
+  Scores.subscribe(function (v) {
+    if (v.state === "waking") sawWaking = true;
+    if (lbTrace && v.state !== "loading" && v.state !== "waking") { lbTrace.metric("entries", v.entries.length).stop({ store: v.store, state: v.state, cold_start: sawWaking }); lbTrace = null; }
+    render(v);
+  });
 
   // tiny language switcher (same as the game's)
   $("btnLang").onclick = function () {
     var to = window.currentLang === "en" ? "ta" : "en";
-    track("language_switch_clicked", { from: window.currentLang, to: to, screen: "scan" });
+    track("language_changed", { from: window.currentLang, to: to, screen: "scan" });
     applyLang(to); if (last) render(last);
   };
 })();

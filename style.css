@@ -44,3 +44,16 @@ html,body{margin:0;height:100%;overflow:hidden;font-family:system-ui,-apple-syst
 .name-note{margin:6px 2px 0;font-size:12px;line-height:1.35;color:#678;text-align:left}
 .over-name{font-size:17px;font-weight:800;margin:4px 0 0;color:#1b5e20;overflow-wrap:anywhere}
 #hud .player{max-width:28%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}
+/* observability demo features */
+.overlay .card{max-height:100%;overflow-y:auto}
+.linkish{display:block;margin:8px auto 0;background:none;border:0;color:#1b5e20;font-size:13px;text-decoration:underline;opacity:.8;cursor:pointer;font-family:inherit}
+.mode-panel{margin-top:8px;padding:10px;border:1px dashed #c8e6c9;border-radius:14px;text-align:left}
+.mode-panel[hidden]{display:none}
+.modes{display:flex;gap:12px;justify-content:center;font-size:14px;font-weight:700;margin-bottom:8px}
+.code-input{text-transform:uppercase;font-size:15px;padding:10px 12px}
+.bonus{display:inline-block;margin-top:10px;padding:8px 14px;border:2px solid #f4b400;border-radius:999px;background:#fff8e1;color:#8d6e00;font-weight:800;font-size:14px;font-family:inherit;cursor:pointer}
+.bonus.claimed{border-color:#c8e6c9;background:#f1f8e9;color:#33691e}
+.hidden-feature{margin:4px 0 0;text-align:right;font-size:10px}
+.hidden-feature a{color:#1b3d1b;opacity:.3;text-decoration:none}
+#app.night{background:linear-gradient(#0b1d3a,#23395d 70%,#1b3a2a)}
+#hudName.sparkle::after{content:" ✨"}

@@ -34,7 +34,11 @@ window.I18N = {
     yourName: "Your name", defaultName: "Player", wellPlayed: "Well played, {name}! Score: {n}",
     nameWarning: "Your name will be shown on the public leaderboard.",
     rulesTitle: "Points", ruleMango: "🥭 Mango +1", ruleGold: "✨ Glowing mango +3",
-    ruleChilli: "🌶️ Chilli −1 life", ruleApple: "🍎 Apple −2 points"
+    ruleChilli: "🌶️ Chilli −1 life", ruleApple: "🍎 Apple −2 points",
+    quickPlay: "▶ Quick Play", chooseMode: "Choose mode / Enter code", modeClassic: "🥭 Classic", modeNight: "🌙 Night look",
+    roomCode: "Room code (optional)", startMode: "Start game", dailyBonus: "🎁 Daily bonus",
+    bonusGranted: "✨ Bonus unlocked: a sparkle next to your name! (score unchanged)", bonusAlready: "Today's bonus is already yours ✨",
+    lbLinkQuiet: "leaderboard"
   },
   ta: {
     title: "மாம்பழம் பிடி", tagline: "மாம்பழங்களைத் தட்டுங்கள், மிளகாய்களைத் தவிர்க்கவும்!",
@@ -69,7 +73,11 @@ window.I18N = {
     yourName: "உங்கள் பெயர்", defaultName: "வீரர்", wellPlayed: "நன்றாக விளையாடினீர்கள், {name}! மதிப்பெண்: {n}",
     nameWarning: "உங்கள் பெயர் பொது லீடர்போர்டில் தெரியும்.",
     rulesTitle: "புள்ளிகள்", ruleMango: "🥭 மாம்பழம் +1", ruleGold: "✨ ஒளிரும் மாம்பழம் +3",
-    ruleChilli: "🌶️ மிளகாய் −1 உயிர்", ruleApple: "🍎 ஆப்பிள் −2 புள்ளிகள்"
+    ruleChilli: "🌶️ மிளகாய் −1 உயிர்", ruleApple: "🍎 ஆப்பிள் −2 புள்ளிகள்",
+    quickPlay: "▶ விரைவு ஆட்டம்", chooseMode: "முறையைத் தேர்ந்தெடு / குறியீட்டை உள்ளிடு", modeClassic: "🥭 கிளாசிக்", modeNight: "🌙 இரவுத் தோற்றம்",
+    roomCode: "அறைக் குறியீடு (விருப்பம்)", startMode: "ஆட்டத்தைத் தொடங்கு", dailyBonus: "🎁 தினசரி போனஸ்",
+    bonusGranted: "✨ போனஸ் கிடைத்தது: உங்கள் பெயருக்கு அருகில் ஒரு மின்னல்! (மதிப்பெண் மாறாது)", bonusAlready: "இன்றைய போனஸ் ஏற்கனவே உங்களுடையது ✨",
+    lbLinkQuiet: "முன்னிலைப் பட்டியல்"
   }
 };
 window.t = function (key, vars) {
