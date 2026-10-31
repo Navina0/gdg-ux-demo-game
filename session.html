@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#1b5e20">
+<title>GDG Salem · Live Session Leaderboard · Mango Catch</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,"Noto Sans Tamil","Segoe UI",Roboto,sans-serif;background:linear-gradient(#7ec8e3,#c8f0a0 70%,#5aa83a) fixed;color:#1b3d1b}
+.wrap{max-width:720px;margin:0 auto;padding:14px}
+.card{background:#fff;border-radius:20px;padding:18px 14px;box-shadow:0 10px 40px rgba(0,0,0,.25)}
+h1{margin:0 0 4px;font-size:26px;text-align:center}
+.sub{margin:0 0 12px;text-align:center;font-size:14px;color:#456}
+.pill{display:inline-block;background:#e53935;color:#fff;font-weight:800;font-size:12px;border-radius:999px;padding:2px 9px;margin-right:6px;vertical-align:2px;animation:p 1.6s ease-in-out infinite}
+@keyframes p{50%{opacity:.45}}
+table{width:100%;border-collapse:collapse;font-size:16px}
+th{font-size:12.5px;text-transform:uppercase;letter-spacing:.02em;color:#456;padding:8px 4px;border-bottom:2px solid #c8e6c9;text-align:center}
+td{padding:10px 4px;border-bottom:1px solid #eef3ee;text-align:center}
+td.rank{font-weight:800;font-size:18px;white-space:nowrap}
+td.adj{font-weight:800;color:#1b5e20;font-size:18px}
+td.hints.many{color:#c62828;font-weight:700}
+tr.top td{background:#fff8e1}
+.state{text-align:center;padding:26px 8px;color:#456;font-size:16px}
+.state.empty{font-size:22px;font-weight:800;color:#e65100}
+.spin{display:inline-block;width:18px;height:18px;border:3px solid #c8e6c9;border-top-color:#1b5e20;border-radius:50%;animation:s 1s linear infinite;vertical-align:-4px;margin-right:6px}
+@keyframes s{to{transform:rotate(360deg)}}
+.meta{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;color:#567;margin-top:10px;flex-wrap:wrap}
+.who{display:inline-flex;align-items:center;gap:6px;justify-content:center}
+.who .pname{font-weight:700;max-width:12em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;unicode-bidi:isolate}
+.mango-av{flex:none;filter:drop-shadow(0 2px 2px rgba(0,0,0,.2))}
+.back{display:block;text-align:center;margin-top:14px;font-weight:800;color:#fff;background:#ff9800;border-radius:14px;padding:14px;text-decoration:none}
+.lang{position:absolute;top:10px;right:10px;border:0;border-radius:999px;background:#fff;padding:6px 12px;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.2);cursor:pointer}
+@media(min-width:900px){table{font-size:24px}h1{font-size:42px}.sub{font-size:18px}.wrap{max-width:1000px}.state.empty{font-size:34px}}
+</style>
+<!-- Microsoft Clarity: heat maps + session recordings (project "Mango Catch") -->
+<script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","z5u9dwxkxk");</script>
+</head>
+<body>
+<button class="lang" id="lang" type="button">தமிழ்</button>
+<div class="wrap">
+  <div class="card">
+    <h1 id="title">🏆 GDG Salem · Live Session Leaderboard</h1>
+    <p class="sub"><span class="pill">LIVE</span><span id="sub"></span></p>
+    <div id="state" class="state"><span class="spin"></span><span id="stateText"></span></div>
+    <table id="tbl" hidden>
+      <thead><tr><th id="hRank"></th><th id="hPlayer"></th><th id="hHints"></th><th id="hAdj"></th><th id="hLevels"></th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <div class="meta"><span id="count"></span><span id="updated"></span></div>
+  </div>
+  <a class="back" href="./" id="play">🥭 Play Mango Catch</a>
+</div>
+<script src="avatar.js?v=20261030c"></script>
+<script>
+(function () {
+  var API = "https://mango-catch-api.onrender.com";
+  var DEFAULT_SINCE = Date.parse("2026-10-31T15:00:00+05:30");   // GDG Salem session start (3:00 PM IST) = 1793439000000
+  var TEST_NAME = /^\s*(test bot|test_|pwtest|pw|obs check)/i;    // our own test/bot runs
+  var L = {
+    en: { title: "🏆 GDG Salem · Live Session Leaderboard", sub: "Scores since {t} · Adjusted = Score − 5 × Hint clicks",
+          rank: "Rank", player: "Player · Score", hints: "Hint clicks", adj: "Adjusted", levels: "Levels",
+          loading: "Loading…", waking: "Waking up the server… (free hosting sleeps when idle, this can take up to a minute)",
+          error: "Can't reach the server right now. Retrying…", empty: "🥭 Be the first! Scan & play",
+          players: "{n} player(s) this session", updated: "Updated {t} · refreshes every 10 s", play: "🥭 Play Mango Catch", other: "தமிழ்" },
+    ta: { title: "🏆 GDG Salem · நேரலை அமர்வு முன்னிலைப் பட்டியல்", sub: "{t} முதல் மதிப்பெண்கள் · தரவரிசை = மதிப்பெண் − 5 × குறிப்பு அழுத்தங்கள்",
+          rank: "இடம்", player: "வீரர் · மதிப்பெண்", hints: "குறிப்பு அழுத்தங்கள்", adj: "சரிசெய்த மதிப்பெண்", levels: "நிலைகள்",
+          loading: "ஏற்றுகிறது…", waking: "சர்வர் விழித்துக்கொண்டிருக்கிறது… (ஒரு நிமிடம் வரை ஆகலாம்)",
+          error: "இப்போது சர்வரை அடைய முடியவில்லை. மீண்டும் முயல்கிறது…", empty: "🥭 முதலில் நீங்களே! ஸ்கேன் செய்து விளையாடுங்கள்",
+          players: "இந்த அமர்வில் {n} பேர்", updated: "{t}-க்கு புதுப்பிக்கப்பட்டது · ஒவ்வொரு 10 வினாடிக்கும்", play: "🥭 மாம்பழம் பிடி விளையாடு", other: "English" }
+  };
+  function parseSince(v) {
+    if (!v) return DEFAULT_SINCE;
+    if (/^\d+$/.test(v)) { var n = +v; return n < 1e12 ? n * 1000 : n; }   // seconds or ms
+    var d = Date.parse(v); return isNaN(d) ? DEFAULT_SINCE : d;
+  }
+  var since = parseSince(new URLSearchParams(location.search).get("since"));
+  var lang = "en"; try { lang = localStorage.getItem("lang") === "ta" ? "ta" : "en"; } catch (e) {}
+  var $ = function (id) { return document.getElementById(id); };
+  function tr(k, vars) { var s = L[lang][k] || L.en[k]; for (var x in vars || {}) s = s.replace("{" + x + "}", vars[x]); return s; }
+  var last = null, status = "loading", lastAt = null;
+
+  function fmtSince() {
+    return new Date(since).toLocaleString(lang === "ta" ? "ta-IN" : "en-IN", { timeZone: "Asia/Kolkata", day: "numeric", month: "short", hour: "numeric", minute: "2-digit" }) + " IST";
+  }
+  function render() {
+    document.documentElement.lang = lang;
+    $("title").textContent = tr("title"); $("sub").textContent = tr("sub", { t: fmtSince() });
+    $("hRank").textContent = tr("rank"); $("hPlayer").textContent = tr("player"); $("hHints").textContent = tr("hints");
+    $("hAdj").textContent = tr("adj"); $("hLevels").textContent = tr("levels"); $("play").textContent = tr("play"); $("lang").textContent = tr("other");
+    var st = $("state"), tb = $("rows"); tb.textContent = "";
+    var list = last || [];
+    list.forEach(function (e, i) {
+      var r = i + 1, row = document.createElement("tr"); if (r <= 3) row.className = "top";
+      var td = function (cls, txt) { var c = document.createElement("td"); c.className = cls; if (txt != null) c.textContent = txt; row.appendChild(c); return c; };
+      td("rank", (r === 1 ? "🥇 " : r === 2 ? "🥈 " : r === 3 ? "🥉 " : "") + r);
+      var who = td("score"), w = document.createElement("span"); w.className = "who";
+      w.innerHTML = window.mangoAvatar ? mangoAvatar(e.pid || String(e.at), 34) : "";
+      var nm = document.createElement("span"); nm.className = "pname"; nm.textContent = e.name || "Player"; nm.title = nm.textContent;  // plain text only
+      var b = document.createElement("b"); b.textContent = e.score;
+      w.appendChild(nm); w.appendChild(b); who.appendChild(w);
+      td("hints" + (e.hints >= 3 ? " many" : ""), String(e.hints));
+      td("adj", String(e.adjusted));
+      td("levels", e.levels + "/" + Math.max(2, e.levels));
+      tb.appendChild(row);
+    });
+    $("tbl").hidden = list.length === 0;
+    st.className = "state";
+    if (last && list.length === 0) { st.hidden = false; st.className = "state empty"; st.textContent = tr("empty"); }
+    else if (!last) { st.hidden = false; st.innerHTML = '<span class="spin"></span>'; st.appendChild(document.createTextNode(tr(status))); }
+    else st.hidden = true;
+    $("count").textContent = last ? tr("players", { n: list.length }) : "";
+    $("updated").textContent = lastAt ? tr("updated", { t: lastAt.toLocaleTimeString() }) : "";
+  }
+  var timer;
+  function load() {
+    clearTimeout(timer);
+    var ctl = window.AbortController ? new AbortController() : null;
+    var to = setTimeout(function () { if (ctl) ctl.abort(); }, 75000);
+    var slow = setTimeout(function () { if (!last) { status = "waking"; render(); } }, 4000);   // Render cold start
+    fetch(API + "/leaderboard?_=" + Date.now(), { cache: "no-store", signal: ctl ? ctl.signal : undefined })
+      .then(function (r) { if (!r.ok) throw new Error("http_" + r.status); return r.json(); })
+      .then(function (j) {
+        if (!j || !j.ok || !Array.isArray(j.entries)) throw new Error("bad");
+        last = j.entries.filter(function (e) {
+          return typeof e.at === "number" && e.at >= since && !TEST_NAME.test(e.name || "");
+        });   // server order = Adjusted desc, Score desc, fewer hints, earlier
+        lastAt = new Date(); status = "loading";
+        timer = setTimeout(load, 10000);
+      })
+      .catch(function () { if (!last) status = "error"; timer = setTimeout(load, 5000); })
+      .then(function () { clearTimeout(to); clearTimeout(slow); render(); });
+  }
+  $("lang").onclick = function () { lang = lang === "en" ? "ta" : "en"; try { localStorage.setItem("lang", lang); } catch (e) {} render(); };
+  render(); load();
+})();
+</script>
+</body>
+</html>
