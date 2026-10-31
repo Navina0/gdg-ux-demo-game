@@ -55,7 +55,7 @@ No names, emails, scores-as-identity or tokens are ever sent (`name_entered` is 
 ### Frustration signals (the "users don't complain, they rage-click" slide)
 | Event | Properties | Talk point |
 |---|---|---|
-| `bonus_clicked` | click_n, pending, claimed | The **🎁 Daily bonus** button takes 1.8 s with *no feedback* |
+| `bonus_clicked` | click_n, pending, claimed | The **🎁 Daily bonus** button takes ~3 s with *no feedback* |
 | `rage_click` | target (e.g. `daily_bonus`), clicks_in_1s (3), page | 3+ clicks on the same control within 1 s. Fires on any button/link (not the game field) |
 | `bonus_granted` | wait_ms, clicks_while_waiting, cosmetic: true | Show `clicks_while_waiting` > 0 → "add a spinner" is the AI's obvious fix. The bonus is cosmetic (sparkle), **score unchanged** |
 | `js_error` | kind (error/unhandledrejection), message (≤150 chars, URLs/emails/numbers stripped), file, line, page | Errors users never report. Demo with `?demo_error=1` |
@@ -87,3 +87,16 @@ Firebase also records automatic page-load and network-request traces (Render API
 `config.js`: `GA_MEASUREMENT_ID` (`G-6XY4T8T70S`; also in the gtag `<script>` tags of `index.html`, `scan.html`, `leaderboard.html`),
 `FIREBASE_WEB_CONFIG` (Performance only; it is not a secret), `MIXPANEL_API_HOST` (EU). `FIREBASE_CONFIG` stays `null` → scores stay on Render.
 The Mixpanel token is **not** in the repo.
+
+## Microsoft Clarity custom events (project z5u9dwxkxk)
+
+| Event | When |
+|---|---|
+| `daily_bonus_clicked` | first tap on 🎁 Daily bonus |
+| `rage_daily_bonus` | 3+ taps on 🎁 Daily bonus within 2 s (once per burst; also `clarity("upgrade")` so the recording is prioritised) |
+| `dead_click_bait` | tap on the bobbing 🥭 "tap me" emoji on the start card, or the "GDG · Beyond the UI" footer pill (both do nothing on purpose) |
+| `game_started`, `game_over` | game start / game over (tag `score_bucket` = 0-9, 10-29, 30+) |
+| `chilli_hit` | a 🌶️ was tapped |
+| `screen_start`, `screen_playing`, `screen_level_up`, `screen_paused`, `screen_game_over`, `screen_leaderboard_opened` | screen changes (tag `screen` has the same value) |
+
+The Daily bonus now waits ~3 s with no feedback.

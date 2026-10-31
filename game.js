@@ -2,6 +2,12 @@
   var C = window.GAME_CONFIG;
   var $ = function (id) { return document.getElementById(id); };
   var field = $("field");
+  // ---------- Microsoft Clarity custom tags/events (never throws if Clarity is blocked or missing) ----------
+  function cl() { try { if (typeof window.clarity === "function") window.clarity.apply(null, arguments); } catch (e) {} }
+  function setScreen(x) {
+    try { document.body.setAttribute("data-screen", x); } catch (e) {}
+    cl("set", "screen", x); cl("event", "screen_" + x);
+  }
   var st = { running: false, paused: false, level: 1, score: 0, lives: C.LIVES, timeLeft: C.LEVEL_SECONDS,
              items: [], last: 0, spawnAcc: 0, sound: true, startedAt: 0, hintsUsed: 0 };
   var best = +(localStorage.getItem("best") || 0);
@@ -85,7 +91,7 @@
 
   function hit(it) {
     if (!st.running || st.paused) return;
-    if (it.kind === "chilli") { st.lives--; beep(160, 0.25); popText(it, "−❤️", "#ff5252"); if (navigator.vibrate) navigator.vibrate(60); }
+    if (it.kind === "chilli") { cl("event", "chilli_hit"); st.lives--; beep(160, 0.25); popText(it, "−❤️", "#ff5252"); if (navigator.vibrate) navigator.vibrate(60); }
     else if (it.kind === "apple") {   // −2 points, no life lost; never below the score banked at the start of this level (level score ≥ 0)
       st.score = Math.max(st.score - 2, st.levelStartScore || 0); beep(220, 0.2); popText(it, "−2", "#ff8a65");
     }
@@ -120,6 +126,7 @@
     if (window.OBS) levelTrace = OBS.trace("level_play", { level: st.level, mode: st.mode || "classic" });
     st.timeLeft = C.LEVEL_SECONDS; st.last = 0; st.spawnAcc = 0; st.running = true; st.paused = false; st.levelStartScore = st.score;
     track("level_started", { level: st.level });
+    setScreen("playing");
     hud(); requestAnimationFrame(loop);
   }
 
@@ -131,7 +138,7 @@
     if (window.Scores && st.level < C.LEVELS) Scores.progress({ score: st.score, levelsCompleted: st.level, hintsUsed: st.hintsUsed });
     if (st.level >= C.LEVELS) return endGame("completed");
     st.level++; beep(880, 0.3);
-    $("levelUpText").textContent = t("nextLevel", { n: st.level }); show("levelUp", true);
+    $("levelUpText").textContent = t("nextLevel", { n: st.level }); show("levelUp", true); setScreen("level_up");
     levelTimer = setTimeout(function () { show("levelUp", false); startLevel(); }, 1600);
   }
 
@@ -158,6 +165,7 @@
     track("game_started", Object.assign({ via: via || "quick_play", start_method: via || "quick_play", mode: st.mode || "classic",
                                           sound_on: st.sound, has_name: !!cleanName($("playerName").value) }, extra || {}));
     if (window.Scores) Scores.beginRun();
+    cl("event", "game_started");
     startLevel();
   }
 
@@ -172,6 +180,8 @@
     $("finalScore").textContent = st.score;
     $("overName").textContent = fill("wellPlayed", { name: playerName(), n: st.score });
     show("over", true);
+    cl("set", "score_bucket", st.score >= 30 ? "30+" : st.score >= 10 ? "10-29" : "0-9");
+    cl("event", "game_over"); setScreen("game_over");
     saveScore(reason, reason === "completed" ? C.LEVELS : st.level - 1);
   }
 
@@ -223,11 +233,19 @@
     startGame("choose_mode", { has_room_code: !!code, room_code: /^[A-Z0-9]{2,8}$/.test(code) ? code : null });
   };
 
-  // Deliberately slow "Daily bonus": no feedback for ~1.8 s → people tap again and again (rage clicks).
+  // Deliberately slow "Daily bonus": no feedback for ~3 s → people tap again and again (rage clicks).
   // Purely cosmetic (a sparkle next to the name); it never touches the score.
-  var bonus = { pending: false, claimed: false, clicks: 0, firstAt: 0 };
+  // Clarity: 3+ taps within 2 s = one "rage_daily_bonus" event per burst (+ upgrade so the recording is kept/prioritised).
+  var bonus = { pending: false, claimed: false, clicks: 0, firstAt: 0, recent: [], rageFired: false };
   $("btnBonus").onclick = function () {
     bonus.clicks++;
+    var now = Date.now();
+    bonus.recent = bonus.recent.filter(function (t) { return now - t < 2000; }); bonus.recent.push(now);
+    if (bonus.recent.length === 1) bonus.rageFired = false;   // a new burst
+    if (bonus.clicks === 1) cl("event", "daily_bonus_clicked");
+    if (bonus.recent.length >= 3 && !bonus.rageFired) {
+      bonus.rageFired = true; cl("event", "rage_daily_bonus"); cl("upgrade", "rage_daily_bonus");
+    }
     track("bonus_clicked", { click_n: bonus.clicks, pending: bonus.pending, claimed: bonus.claimed });
     if (bonus.claimed) { toast(t("bonusAlready")); return; }
     if (bonus.pending) return;   // still "loading", with no spinner on purpose
@@ -237,7 +255,7 @@
       $("btnBonus").classList.add("claimed"); $("hudName").classList.add("sparkle");
       toast(t("bonusGranted"), 2600); beep(990, 0.2);
       track("bonus_granted", { wait_ms: Date.now() - bonus.firstAt, clicks_while_waiting: bonus.clicks - 1, cosmetic: true });
-    }, 1800);
+    }, 3000);
   };
 
   // Leaderboard links: track, then navigate a moment later so the event can leave the page.
@@ -245,6 +263,7 @@
     $(id).addEventListener("click", function (e) {
       if (e.metaKey || e.ctrlKey || e.shiftKey) return;
       e.preventDefault(); var href = $(id).href;
+      setScreen("leaderboard_opened");
       track("leaderboard_opened", { from: id === "lnkLbStart" ? "start" : "game_over", link: id === "lnkLbStart" ? "hidden_small" : "game_over" });
       setTimeout(function () { location.href = href; }, 300);
     });
@@ -256,10 +275,10 @@
   };
   function pause() {
     if (!st.running || st.paused) return;
-    st.paused = true; show("paused", true); track("pause_used", { level: st.level, time_left: Math.ceil(st.timeLeft) });
+    st.paused = true; show("paused", true); setScreen("paused"); track("pause_used", { level: st.level, time_left: Math.ceil(st.timeLeft) });
   }
   $("btnPause").onclick = pause;
-  $("btnResume").onclick = function () { st.paused = false; show("paused", false); track("resume_used", { level: st.level }); };
+  $("btnResume").onclick = function () { st.paused = false; show("paused", false); setScreen("playing"); track("resume_used", { level: st.level }); };
   document.addEventListener("visibilitychange", function () { if (document.hidden) pause(); });
   $("btnHint").onclick = function () {
     st.hintsUsed++; showRules();
@@ -288,6 +307,12 @@
     toast(t("langChanged"));
   };
   hud();
+  // Dead-click bait: these LOOK tappable (pointer cursor, "tap me" hint) but deliberately do nothing.
+  // Clarity detects the dead clicks itself; this custom event is just an extra marker.
+  Array.prototype.forEach.call(document.querySelectorAll(".dead-bait"), function (el) {
+    el.addEventListener("click", function () { cl("event", "dead_click_bait"); cl("set", "dead_bait", el.getAttribute("data-bait") || "?"); });
+  });
+  setScreen("start");
   // game_load: from navigation start until the start screen is ready (Firebase Performance custom trace)
   if (window.OBS) OBS.record("game_load", performance.timeOrigin || (Date.now() - performance.now()), performance.now(),
                              { page: "game", from: new URLSearchParams(location.search).get("from") || "direct" });

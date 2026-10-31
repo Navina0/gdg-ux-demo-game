@@ -57,3 +57,11 @@ html,body{margin:0;height:100%;overflow:hidden;font-family:system-ui,-apple-syst
 .hidden-feature a{color:#1b3d1b;opacity:.3;text-decoration:none}
 #app.night{background:linear-gradient(#0b1d3a,#23395d 70%,#1b3a2a)}
 #hudName.sparkle::after{content:" ✨"}
+/* Clarity dead-click bait: looks tappable, does nothing (deliberate) */
+.dead-bait{cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.bait-mango{display:inline-block;position:relative;animation:baitBob 1.6s ease-in-out infinite}
+.bait-mango::after{content:"tap me 👆";position:absolute;left:100%;bottom:6px;font-size:11px;font-weight:700;color:#8d6e00;white-space:nowrap;margin-left:2px}
+@keyframes baitBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.bait-credit{pointer-events:auto;opacity:.75;padding:3px 8px;border:1px solid #0003;border-radius:999px;background:#ffffff80;font-weight:700}
+body[data-screen="playing"] .bait-credit{pointer-events:none}
+.bonus{touch-action:manipulation}
